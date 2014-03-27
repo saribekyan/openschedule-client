@@ -4,10 +4,13 @@
     <string name="app_name">OpenSchedule</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
     <string name="login_app_name">OpenSchedule</string>
     <string name="login_kerberos_id">Kerberos ID</string>
     <string name="login_kerberos_password">Kerberos password</string>
     <string name="login_log_in">Log In</string>
-    
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="home_title_calendar">Calendar</string>
+    <string name="home_title_tasks">Tasks</string>
+    <string name="home_title_classes">Classes</string>
+
 </resources>
