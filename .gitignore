@@ -2,7 +2,6 @@
 
 /gen
 /.settings
-/libs
 .classpath
 .project
 proguard-project.txt
