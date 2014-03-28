@@ -1,4 +1,4 @@
-package edu.mit.openschedule;
+package edu.mit.openschedule.ui;
 
 import java.util.Locale;
 
@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import edu.mit.openschedule.R;
 
 public class HomeActivity extends ActionBarActivity implements
 		ActionBar.TabListener {

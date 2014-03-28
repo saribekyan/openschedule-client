@@ -4,9 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <CalendarView
-        android:id="@+id/home_calendar"
+    <TextView
+        android:id="@+id/calendar_date"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ListView
+        android:id="@+id/calendar_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:dividerHeight="-7.0sp"
+        android:padding="0dp" >
+    </ListView>
 
 </LinearLayout>
