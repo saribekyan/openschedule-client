@@ -126,11 +126,11 @@ public class HomeActivity extends ActionBarActivity implements
 			case 0:
 				return new CalendarFragment();
 			case 1:
-				break;
+				return new TasksFragment();
 			case 2:
-				break;
+				return new ClassesFragment();
 			}
-			return new Fragment();
+			throw new IllegalArgumentException(String.format("position = %d", position));
 		}
 
 		@Override

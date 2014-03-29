@@ -12,5 +12,14 @@
     <string name="home_title_calendar">Calendar</string>
     <string name="home_title_tasks">Tasks</string>
     <string name="home_title_classes">Classes</string>
+    <string name="tasks_text_personal_deadline">Personal Deadline:</string>
+    <string name="tasks_pick_time">Pick TIme</string>
+    <string name="tasks_pick_date">Pick Date</string>
+    <string name="tasks_text_class_deadline">Class Deadline:</string>
+    <string name="tasks_others_spent_text">Others Spent: </string>
+    <string name="tasks_submit_location_text">Submit Location: </string>
+    <string name="task_finished_text">Finished</string>
+    <string name="task_just_finished">Just Finished!</string>
+    <string name="tasks_user_spent_text">You Spent: </string>
 
 </resources>

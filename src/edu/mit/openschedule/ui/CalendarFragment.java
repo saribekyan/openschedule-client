@@ -110,7 +110,7 @@ public class CalendarFragment extends Fragment {
 			LinearLayout rowView = (LinearLayout)
 					inflater.inflate(R.layout.calendar_row_layout, parent, false);
 			
-			if (position % 2 == 0) {
+			if (position % 2 == 0) { // round hours
 				TextView textView = (TextView) rowView.findViewById(R.id.text_calendar_time);
 				textView.setText(times.get(position).toString());
 			}

@@ -2,8 +2,6 @@ package edu.mit.openschedule.model;
 
 import java.util.Locale;
 
-import android.net.ParseException;
-
 public class Time {
 
 	public static final Time START = new Time("9:00");

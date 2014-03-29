@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!-- Personal Deadline -->
+    <LinearLayout
+        android:id="@+id/tasks_personal_deadline_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_height="@dimen/task_attr_height"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:text="@string/tasks_text_personal_deadline"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/tasks_button_pick_personal_date_time"
+            android:layout_height="@dimen/task_attr_height"
+           	android:layout_width="match_parent"
+           	android:layout_weight="1.0"
+           	android:gravity="center_vertical"
+            android:onClick="showTimePickerDialog"
+            android:text="@string/tasks_pick_time" />
+        
+        <TextView 
+            android:id="@+id/tasks_finished_text" 
+            android:layout_height="@dimen/task_attr_height"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:text="@string/task_finished_text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Class Deadline -->
+    <LinearLayout
+        android:id="@+id/tasks_class_deadline_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_height="@dimen/task_attr_height"
+            android:layout_width="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:text="@string/tasks_text_class_deadline"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/tasks_button_pick_class_date_time"
+            android:layout_height="@dimen/task_attr_height"
+           	android:layout_width="match_parent"
+           	android:layout_weight="1.0"
+           	android:gravity="center_vertical"
+            android:onClick="showTimePickerDialog"
+            android:text="@string/tasks_pick_time" />
+    </LinearLayout>
+    
+    <!-- Others/User Spent -->
+    <LinearLayout
+        android:id="@+id/tasks_others_spent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <!-- others spent -->
+        <TextView
+            android:id="@+id/tasks_others_spent_title_text"
+            android:layout_height="@dimen/task_attr_height"
+            android:layout_width="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:text="@string/tasks_others_spent_text"
+            android:textAppearance="?android:attr/textAppearanceMedium" 
+            android:visibility="visible"/>
+
+
+        <TextView
+            android:id="@+id/tasks_others_spent_value"
+            android:layout_height="@dimen/task_attr_height"
+           	android:layout_width="match_parent"
+           	android:gravity="center_vertical"
+           	android:layout_weight="1.0" 
+           	android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+    
+    <!-- user spent -->
+    <LinearLayout
+        android:id="@+id/tasks_user_spent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <!-- user spent -->
+        <TextView
+            android:id="@+id/tasks_user_spent_title_text"
+            android:layout_height="@dimen/task_attr_height"
+            android:layout_width="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:text="@string/tasks_user_spent_text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/tasks_user_spent_value"
+            android:layout_height="@dimen/task_attr_height"
+           	android:layout_width="match_parent"
+           	android:gravity="center_vertical"
+           	android:layout_weight="1.0" 
+           	android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+    
+    <!-- Submit Location -->
+    <LinearLayout
+        android:id="@+id/tasks_submit_location_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_height="@dimen/task_attr_height"
+            android:layout_width="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:text="@string/tasks_submit_location_text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/tasks_submit_location_value"
+            android:layout_height="@dimen/task_attr_height"
+           	android:layout_width="match_parent"
+           	android:layout_weight="1.0" 
+           	android:gravity="center_vertical"
+           	android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+    
+   	<Button
+     	android:id="@+id/tasks_finish_submit_button"
+     	android:layout_height="@dimen/task_attr_height"
+    	android:layout_width="@dimen/tasks_finish_submit_button_width"
+    	android:gravity="center"
+    	android:layout_gravity="center"
+    	android:text="@string/task_just_finished" />
+
+</LinearLayout>

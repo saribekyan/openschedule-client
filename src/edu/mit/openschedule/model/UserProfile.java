@@ -1,10 +1,13 @@
 package edu.mit.openschedule.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import edu.mit.openschedule.model.Subject.Meeting;
 import edu.mit.openschedule.model.Subject.MeetingType;
+import edu.mit.openschedule.model.Task.Status;
 
 public class UserProfile {
 	private static UserProfile singletonProfile = null;
@@ -19,6 +22,10 @@ public class UserProfile {
 	private List<Integer> labNumber =
 			new ArrayList<Integer>();
 	
+	private List<Task> tasks =
+			new ArrayList<Task>();
+	
+	// Singleton
 	private UserProfile() {
 		name = "Tsotne Tabidze";
 		subjects = new ArrayList<Subject>();
@@ -81,7 +88,9 @@ public class UserProfile {
 //		recitationNumber.add(0);
 //		labNumber.add(null);
 		
-
+		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online"));
+		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30));
+		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30).submit());
 	}
 	
 	public static UserProfile getUserProfile() {
@@ -121,5 +130,27 @@ public class UserProfile {
 			}
 		}
 		return meetings;
+	}
+	
+	public List<Task> getNotSubmittedTasksSorted() {
+		List<Task> resultList = new ArrayList<Task>();
+		for (Task task : tasks) {
+			if (task.getStatus() != Status.SUBMITTED) {
+				resultList.add(task);
+			}
+		}
+		Collections.sort(resultList);
+		return resultList;
+	}
+	
+	public List<Task> getSubmittedTasksSorted() {
+		List<Task> resultList = new ArrayList<Task>();
+		for (Task task : tasks) {
+			if (task.getStatus() == Status.SUBMITTED) {
+				resultList.add(task);
+			}
+		}
+		Collections.sort(resultList);
+		return resultList;
 	}
 }
