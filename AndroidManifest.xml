@@ -26,6 +26,10 @@
             android:name="edu.mit.openschedule.ui.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+        <activity
+            android:name="edu.mit.openschedule.ui.AddSubjectActivity"
+            android:label="@string/title_activity_add_subject" >
+        </activity>
     </application>
 
 </manifest>

@@ -21,5 +21,9 @@
     <string name="task_finished_text">Finished</string>
     <string name="task_just_finished">Just Finished!</string>
     <string name="tasks_user_spent_text">You Spent: </string>
+    <string name="subjects_enter_class_hint">Enter Class</string>
+    <string name="subjects_suggested_classes_text">Suggested Classes</string>
+    <string name="subjects_add_class_button">Add Class</string>
+    <string name="title_activity_add_subject">AddSubjectActivity</string>
 
 </resources>

@@ -91,6 +91,9 @@ public class UserProfile {
 		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online"));
 		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30));
 		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30).submit());
+		
+		Subjects.addSubject(s1);
+		Subjects.addSubject(s2);
 	}
 	
 	public static UserProfile getUserProfile() {
@@ -152,5 +155,9 @@ public class UserProfile {
 		}
 		Collections.sort(resultList);
 		return resultList;
+	}
+	
+	public List<Subject> getSubjectList() {
+		return subjects;
 	}
 }
