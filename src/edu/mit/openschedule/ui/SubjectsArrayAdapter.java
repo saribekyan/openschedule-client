@@ -1,4 +1,4 @@
-package edu.mit.openschedule.model;
+package edu.mit.openschedule.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.Subject;
 
 public class SubjectsArrayAdapter extends ArrayAdapter<String> {
 	

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import edu.mit.openschedule.R;
-import edu.mit.openschedule.model.SubjectsArrayAdapter;
 import edu.mit.openschedule.model.UserProfile;
 
 public class SubjectsFragment extends Fragment {
@@ -20,7 +19,7 @@ public class SubjectsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_subjects, container,
 				false);
 		
-		Button addClassButton = (Button) rootView.findViewById(R.id.subjects_add_class_button);
+		Button addClassButton = (Button) rootView.findViewById(R.id.subjects_add_subject_button);
 		addClassButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

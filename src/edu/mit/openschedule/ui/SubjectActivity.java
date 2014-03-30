@@ -5,17 +5,29 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.Subject;
+import edu.mit.openschedule.model.Subjects;
+import edu.mit.openschedule.model.UserProfile;
 
-public class AddSubjectActivity extends ActionBarActivity {
+public class SubjectActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_subject);
+		setContentView(R.layout.activity_subject);
 
 		if (savedInstanceState == null) {
+			///////////////////////////// test
+			UserProfile.getUserProfile();
+			Subject subject = Subjects.asList().get(0);
+			Bundle bundle = new Bundle();
+			bundle.putInt("subject_id", subject.getId());
+			
+			SubjectFragment subjectFragment = new SubjectFragment();
+			subjectFragment.setArguments(bundle);
+			////////////////////////////////////
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new AddSubjectFragment()).commit();
+					.add(R.id.container, subjectFragment).commit();
 		}
 	}
 
@@ -23,7 +35,7 @@ public class AddSubjectActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.add_subject, menu);
+		getMenuInflater().inflate(R.menu.subject, menu);
 		return true;
 	}
 

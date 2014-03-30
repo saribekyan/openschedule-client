@@ -4,16 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/subjects_add_subject_button"
+    <TextView
+        android:id="@+id/subject_subject_description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/subjects_add_class_button" />
-
-    <ListView
-        android:id="@+id/subjetcs_subject_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:text="@string/subject_class_description_text"
+        android:paddingLeft="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

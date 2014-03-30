@@ -25,5 +25,7 @@
     <string name="subjects_suggested_classes_text">Suggested Classes</string>
     <string name="subjects_add_class_button">Add Class</string>
     <string name="title_activity_add_subject">AddSubjectActivity</string>
+    <string name="title_activity_subject">SubjectActivity</string>
+    <string name="subject_class_description_text">Class Description</string>
 
 </resources>

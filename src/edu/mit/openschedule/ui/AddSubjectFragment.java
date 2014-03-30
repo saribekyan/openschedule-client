@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.Subjects;
-import edu.mit.openschedule.model.SubjectsArrayAdapter;
 
 public class AddSubjectFragment extends Fragment {
 	
@@ -30,9 +29,7 @@ public class AddSubjectFragment extends Fragment {
 		
 		return rootView;
 	}
-	
 
-	
 	private class EnterClassTextWatcher implements TextWatcher {
 		
 		private final SubjectsArrayAdapter adapter;

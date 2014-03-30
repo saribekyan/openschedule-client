@@ -28,8 +28,7 @@ public class TasksFragment extends Fragment {
 		final ExpandableListView listView =
 				(ExpandableListView) rootView.findViewById(R.id.tasks_exp_list);
 		
-		TasksAdapter adapter = new TasksAdapter(getActivity());
-		listView.setAdapter(adapter);
+		listView.setAdapter(new TasksAdapter(getActivity()));
 		
 		return rootView;
 	}
@@ -172,7 +171,7 @@ public class TasksFragment extends Fragment {
 			        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			
 			LinearLayout groupView = (LinearLayout)
-					inflater.inflate(R.layout.tasks_row_group, parent, false);
+					inflater.inflate(R.layout.tasks_row_group_layout, parent, false);
 			
 			TextView taskNameView = (TextView) groupView.findViewById(R.id.tasks_task_name_text);
 			taskNameView.setText(task.getName());

@@ -13,22 +13,32 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
             android:name="edu.mit.openschedule.ui.LoginActivity"
             android:label="@string/app_name" >
+
+        </activity>
+        
+        <activity
+            android:name="edu.mit.openschedule.ui.HomeActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
+        
+        <activity
+            android:name="edu.mit.openschedule.ui.AddSubjectActivity"
+            android:label="@string/title_activity_add_subject" >
+        </activity>
+        
+        <activity
+            android:name="edu.mit.openschedule.ui.SubjectActivity"
+            android:label="@string/title_activity_subject" >
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="edu.mit.openschedule.ui.HomeActivity"
-            android:label="@string/title_activity_home" >
-        </activity>
-        <activity
-            android:name="edu.mit.openschedule.ui.AddSubjectActivity"
-            android:label="@string/title_activity_add_subject" >
         </activity>
     </application>
 
