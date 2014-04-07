@@ -30,7 +30,6 @@ public class Subjects {
 	}
 	
 	public static void addSubject(Subject subject) {
-		subject.setId(subjects.size());
 		subjects.add(subject);
 	}
 

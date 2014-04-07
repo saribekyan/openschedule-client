@@ -1,32 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.mit.openschedule.SubjectActivity$PlaceholderFragment" >
+    android:orientation="vertical" >
 
-    <include
-        android:id="@+id/include1"
-        layout="@layout/subject_name_layout" />
+    <include layout="@layout/subject_name_layout" />
 
     <ExpandableListView
         android:id="@+id/subject_exp_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/include1" >
-
+        android:layout_height="wrap_content" >
     </ExpandableListView>
 
+    <include layout="@layout/subject_rating_group_layout"/>
+    
     <Button
         android:id="@+id/subject_add_remove_subject_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:text="@string/subjects_add_class_button" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -38,14 +38,15 @@ public class UserProfile {
 		Meeting r1 = s1.new Meeting(MeetingType.RECITATION, "36-156", "F3")
 						.add(new WeekdayTime('F', "3", "4"));
 		s1.addLecture(l1)
-			.addRecitation(r1);
+			.addRecitation(r1)
+			.setRating((float) 3.5);
 		Subjects.addSubject(s1);
 		
 		
-		subjects.add(s1);
-		meetingNumber.get(MeetingType.LECTURE).add(0);
-		meetingNumber.get(MeetingType.RECITATION).add(0);
-		meetingNumber.get(MeetingType.LAB).add(null);
+//		subjects.add(s1);
+//		meetingNumber.get(MeetingType.LECTURE).add(0);
+//		meetingNumber.get(MeetingType.RECITATION).add(-1);
+//		meetingNumber.get(MeetingType.LAB).add(null);
 		
 //		Subject s4 = new Subject("6.046", "Algo", "Also is cool");
 //		Meeting l4 = s4.new Meeting(MeetingType.LECTURE, "26-100")
