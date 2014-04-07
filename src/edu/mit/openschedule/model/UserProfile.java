@@ -32,9 +32,10 @@ public class UserProfile {
 		name = "Tsotne Tabidze";
 		subjects = new ArrayList<Subject>();
 		Subject s1 = new Subject("6.046", "Algo", "Also is cool");
-		Meeting l1 = s1.new Meeting(MeetingType.LECTURE, "26-100", "TR9.30-11")
+		Meeting l1 = s1.new Meeting(MeetingType.LECTURE, "26-100", "MTR9.30-11")
 						.add(new WeekdayTime('T', "9:30", "11:00"))
-						.add(new WeekdayTime('R', "9:30", "11"));
+						.add(new WeekdayTime('R', "9:30", "11"))
+						.add(new WeekdayTime('M', "9:30", "11"));
 		Meeting r1 = s1.new Meeting(MeetingType.RECITATION, "36-156", "F3")
 						.add(new WeekdayTime('F', "3", "4"));
 		s1.addLecture(l1)
@@ -43,10 +44,10 @@ public class UserProfile {
 		Subjects.addSubject(s1);
 		
 		
-//		subjects.add(s1);
-//		meetingNumber.get(MeetingType.LECTURE).add(0);
-//		meetingNumber.get(MeetingType.RECITATION).add(-1);
-//		meetingNumber.get(MeetingType.LAB).add(null);
+		subjects.add(s1);
+		meetingNumber.get(MeetingType.LECTURE).add(0);
+		meetingNumber.get(MeetingType.RECITATION).add(-1);
+		meetingNumber.get(MeetingType.LAB).add(null);
 		
 //		Subject s4 = new Subject("6.046", "Algo", "Also is cool");
 //		Meeting l4 = s4.new Meeting(MeetingType.LECTURE, "26-100")
@@ -112,11 +113,11 @@ public class UserProfile {
 			for (int i = 0; i < subjects.size(); ++i) {
 				Subject subject = subjects.get(i);
 				
-				if (meetingNumber.get(type).get(i) != null) {
-					Meeting lecture = subject.getLecture(meetingNumber.get(type).get(i));
-					assert lecture != null;
-					if (lecture.hasMeetingAt(weekdayTime)) {
-						meetings.add(lecture);
+				Integer id = meetingNumber.get(type).get(i);
+				if (id != null && id != -1) {
+					Meeting meeting = subject.getMeeting(type,id);
+					if (meeting.hasMeetingAt(weekdayTime)) {
+						meetings.add(meeting);
 					}
 				}
 			}

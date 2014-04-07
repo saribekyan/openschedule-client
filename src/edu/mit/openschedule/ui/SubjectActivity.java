@@ -14,14 +14,18 @@ public class SubjectActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
 		setContentView(R.layout.activity_subject);
 
 		if (savedInstanceState == null) {
 			///////////////////////////// test
 			UserProfile.getUserProfile();
-			Subject subject = Subjects.asList().get(0);
+			
+			int id = getIntent().getIntExtra(CalendarFragment.SUBJECT_ID, 0);
+			Subject subject = Subjects.asList().get(id);
+			
 			Bundle bundle = new Bundle();
-			bundle.putInt("subject_id", subject.getId());
+			bundle.putInt(CalendarFragment.SUBJECT_ID, subject.getId());
 			
 			SubjectFragment subjectFragment = new SubjectFragment();
 			subjectFragment.setArguments(bundle);
