@@ -7,26 +7,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.mit.openschedule.LoginActivity$PlaceholderFragment" >
-
-    <TextView
-        android:id="@+id/calendar_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:text="@string/login_app_name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
     
     
     <EditText
-        android:id="@+id/login_text_kerberos_id"
+        android:id="@+id/login_edittext_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="88dp"
+        android:layout_below="@+id/login_text_appname"
+        android:layout_marginTop="28dp"
         android:ems="10"
         android:inputType="text"
         android:hint="@string/login_kerberos_id" >
@@ -35,24 +25,34 @@
     </EditText>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/login_edittext_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/login_text_kerberos_id"
+        android:layout_below="@+id/login_edittext_username"
         android:layout_marginTop="28dp"
         android:ems="10"
         android:inputType="textPassword"
         android:hint="@string/login_kerberos_password" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/login_button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/login_edittext_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="@string/login_log_in" />
+
+    <TextView
+        android:id="@+id/login_text_appname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="132dp"
+        android:text="@string/login_app_name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

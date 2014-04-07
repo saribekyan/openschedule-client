@@ -8,6 +8,12 @@
     <string name="login_kerberos_id">Kerberos ID</string>
     <string name="login_kerberos_password">Kerberos password</string>
     <string name="login_log_in">Log In</string>
+    
+    <string name="login_progress_title">Loading</string>
+    <string name="login_progress_logging_in">Logging in&#8230;</string>
+    <string name="login_progress_check_mit">Checking for the MIT username and password&#8230;</string>
+    <string name="login_toast_unable">Unable to sign in</string>
+    
     <string name="title_activity_home">HomeActivity</string>
     <string name="home_title_calendar">Calendar</string>
     <string name="home_title_tasks">Tasks</string>
