@@ -32,10 +32,10 @@ public class UserProfile {
 		name = "Tsotne Tabidze";
 		subjects = new ArrayList<Subject>();
 		Subject s1 = new Subject("6.046", "Algo", "Also is cool");
-		Meeting l1 = s1.new Meeting(MeetingType.LECTURE, "26-100", "MTR9.30-11")
-						.add(new WeekdayTime('T', "9:30", "11:00"))
-						.add(new WeekdayTime('R', "9:30", "11"))
-						.add(new WeekdayTime('M', "9:30", "11"));
+		Meeting l1 = s1.new Meeting(MeetingType.LECTURE, "26-100", "MTR10");
+//						.add(new WeekdayTime('T', "9:30", "11:00"))
+//						.add(new WeekdayTime('R', "9:30", "11"))
+//						.add(new WeekdayTime('M', "9:30", "11"));
 		Meeting r1 = s1.new Meeting(MeetingType.RECITATION, "36-156", "F3")
 						.add(new WeekdayTime('F', "3", "4"));
 		s1.addLecture(l1)
@@ -167,5 +167,14 @@ public class UserProfile {
 			}
 		}
 		return false;
+	}
+
+	public Task getTask(int taskId) {
+		for (Task task : tasks) {
+			if (task.getId() == taskId) {
+				return task;
+			}
+		}
+		throw new RuntimeException("no such id");
 	}
 }

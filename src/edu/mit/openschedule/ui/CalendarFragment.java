@@ -32,8 +32,6 @@ import edu.mit.openschedule.model.WeekdayTime;
 
 public class CalendarFragment extends Fragment {
 	
-	public static final String SUBJECT_ID = "subject_id";
-	
 	private char dayOfWeekChar;
 	
 	@Override
@@ -147,7 +145,7 @@ public class CalendarFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(getActivity(), SubjectActivity.class);
-						intent.putExtra(SUBJECT_ID, meeting.getSubject().getId());
+						intent.putExtra(SubjectActivity.SUBJECT_ID, meeting.getSubject().getId());
 						startActivity(intent);
 					}
 				});

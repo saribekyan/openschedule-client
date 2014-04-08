@@ -3,7 +3,9 @@ package edu.mit.openschedule.ui;
 import java.util.List;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +58,7 @@ public class TasksFragment extends Fragment {
 		@Override
 		public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
-			Task task = tasks.get(groupPosition);
+			final Task task = tasks.get(groupPosition);
 			
 			LayoutInflater inflater = (LayoutInflater) context
 			        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -131,7 +133,14 @@ public class TasksFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
+						DialogFragment timePickerFragment = new AssignmentLengthPickerFragment();
 						
+						Bundle bundle = new Bundle();
+						bundle.putInt("task_id", task.getId());
+					    timePickerFragment.setArguments(bundle);
+					    
+					    timePickerFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+//					    ((BaseExpandableListAdapter)TasksAdapter.this).notifyDataSetInvalidated();
 					}
 				});
 			} else {
@@ -141,7 +150,7 @@ public class TasksFragment extends Fragment {
 			
 			return rowView;
 		}
-
+		
 		@Override
 		public int getChildrenCount(int groupPosition) {
 			return 1;

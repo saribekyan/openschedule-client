@@ -97,6 +97,19 @@ public class Subject {
 			this.location = location;
 			this.meetingWeekdayTimes = new ArrayList<WeekdayTime>();
 			this.mitFormatWeekdayTime = mitFormatWeekdayTime;
+			
+			String days = "MTWRF";
+			int i = 0;
+			while (days.indexOf(mitFormatWeekdayTime.charAt(i)) != -1)
+				++i;
+			int k = mitFormatWeekdayTime.indexOf('-');
+			for (int j = 0; j < i; ++j) {
+				if (k != -1)
+					this.add(new WeekdayTime(mitFormatWeekdayTime.charAt(j), mitFormatWeekdayTime.substring(i, k), 
+							mitFormatWeekdayTime.substring(k+1)));
+				else
+					this.add(new WeekdayTime(mitFormatWeekdayTime.charAt(j), mitFormatWeekdayTime.substring(i)));
+			}
 		}
 		
 		public Meeting add(WeekdayTime weekdayTime) {

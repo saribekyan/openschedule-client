@@ -5,6 +5,10 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class Task implements Comparable<Task> {
+	
+	private final int id;
+	private static int taskIds = 0;
+	
 	private String name;
 	
 	private Calendar personalDeadline;
@@ -30,6 +34,11 @@ public class Task implements Comparable<Task> {
 		userSpent = null;
 		submitLocation = "N/A";
 		status = Status.UNFINISHED;
+		this.id = taskIds++;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public Task setPersonalDeadline(Calendar personalDeadline) {
