@@ -16,7 +16,7 @@ public class WeekdayTime {
 	public WeekdayTime(char weekday, Time startTime) {
 		this.weekday = weekday;
 		this.startTime = startTime;
-		this.endTime = startTime.timeAfter(30);
+		this.endTime = startTime.timeAfter(60);
 	}
 	
 	public WeekdayTime(char weekday, String startTimeString) {
