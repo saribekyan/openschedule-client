@@ -34,6 +34,7 @@ public class HomeActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
 		setContentView(R.layout.activity_home);
 
 		// Set up the action bar.

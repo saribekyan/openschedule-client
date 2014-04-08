@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,6 +31,8 @@ import edu.mit.openschedule.model.UserProfile;
 import edu.mit.openschedule.model.WeekdayTime;
 
 public class CalendarFragment extends Fragment {
+	
+	public static final String SUBJECT_ID = "subject_id";
 	
 	private char dayOfWeekChar;
 	
@@ -120,12 +124,12 @@ public class CalendarFragment extends Fragment {
 			WeekdayTime wt = new WeekdayTime(dayOfWeekChar, times.get(position));
 			
 			List<Meeting> meetings = profile.meetingsAt(wt);
-			for (Meeting meeting : meetings) {
+			for (final Meeting meeting : meetings) {
 				Button button = new Button(context);
 				button.setGravity(Gravity.TOP);
 				if (!meetingNamePosition.containsKey(meeting) ||
 						meetingNamePosition.get(meeting) == position) {
-					button.setText(meeting.getSubject().getSubjectNumber() + meeting.getTypeString());
+					button.setText(meeting.getSubject().getNumber() + meeting.getTypeString());
 					meetingNamePosition.put(meeting, position);
 				}
 				if (!meetingColor.containsKey(meeting)) {
@@ -137,6 +141,16 @@ public class CalendarFragment extends Fragment {
 			    		new LinearLayout.LayoutParams(
 			    				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 			    rowView.addView(button, buttonParams);
+			    
+			    button.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(getActivity(), SubjectActivity.class);
+						intent.putExtra(SUBJECT_ID, meeting.getSubject().getId());
+						startActivity(intent);
+					}
+				});
 			}
 
 		    return rowView;

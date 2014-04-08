@@ -48,9 +48,9 @@ public class SubjectsArrayAdapter extends ArrayAdapter<String> {
 	private List<String> getSubjectNamesContaining(String substr) {
 		List<String> subjectsContaining = new ArrayList<String>();
 		for (Subject subject : subjects) {
-			if (subject.getSubjectName().contains(substr) ||
-					subject.getSubjectNumber().startsWith(substr)) {
-				subjectsContaining.add(subject.getSubjectNumber() + " " + subject.getSubjectName());
+			if (subject.getName().contains(substr) ||
+					subject.getNumber().startsWith(substr)) {
+				subjectsContaining.add(subject.getNumber() + " " + subject.getName());
 			}
 		}
 		return subjectsContaining;

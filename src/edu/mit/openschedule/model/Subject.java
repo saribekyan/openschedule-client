@@ -15,6 +15,8 @@ public class Subject {
 	private final String name;
 	private final String description;
 	
+	private float rating;
+	
 	private Map<MeetingType, List<Meeting> > meetings = new HashMap<MeetingType, List<Meeting>>();
 	
 	public Subject(String number, String name, String description) {
@@ -25,13 +27,13 @@ public class Subject {
 		meetings.put(MeetingType.LECTURE, new ArrayList<Meeting>());
 		meetings.put(MeetingType.RECITATION, new ArrayList<Meeting>());
 		meetings.put(MeetingType.LAB, new ArrayList<Meeting>());
+		
+		this.id = Subjects.asList().size();
+		Subjects.addSubject(this);
 	}
 	
-	public Subject setId(Integer id) {
-		if (this.id != null) {
-			throw new IllegalStateException("id is already set");
-		}
-		this.id = id;
+	public Subject setRating(float rating) {
+		this.rating = rating;
 		return this;
 	}
 	
@@ -59,11 +61,11 @@ public class Subject {
 		return this;
 	}
 	
-	public String getSubjectName() {
+	public String getName() {
 		return name;
 	}
 	
-	public String getSubjectNumber() {
+	public String getNumber() {
 		return number;
 	}
 	
@@ -143,5 +145,17 @@ public class Subject {
 
 	public Meeting getMeeting(MeetingType type, Integer meetingId) {
 		return meetings.get(type).get(meetingId);
+	}
+
+	public int getMeetingCount(MeetingType meetingType) {
+		return meetings.get(meetingType).size();
+	}
+
+	public float getRating() {
+		return rating;
+	}
+
+	public CharSequence getFullName() {
+		return number + " " + name;
 	}
 }

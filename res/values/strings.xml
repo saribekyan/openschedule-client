@@ -33,5 +33,6 @@
     <string name="title_activity_add_subject">AddSubjectActivity</string>
     <string name="title_activity_subject">SubjectActivity</string>
     <string name="subject_class_description_text">Class Description</string>
+    <string name="subject_rating">Rating:</string>
 
 </resources>

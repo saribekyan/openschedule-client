@@ -13,10 +13,10 @@
          android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <TextView
-         android:id="@+id/subject_meeting_time_text"
+         android:id="@+id/subject_meeting_group_time_loc_text"
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
-         android:layout_weight="1.0"
+         android:layout_weight="0.8"
          android:gravity="right"
          android:textAppearance="?android:attr/textAppearanceLarge" />
 
