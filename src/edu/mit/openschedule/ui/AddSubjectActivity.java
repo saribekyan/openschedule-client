@@ -16,7 +16,7 @@ public class AddSubjectActivity extends ActionBarActivity {
 
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new AddSubjectFragment()).commit();
+					.add(R.id.container, new AddSubjectFragment(), "add_subject_fragment").commit();
 		}
 	}
 

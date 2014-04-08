@@ -13,7 +13,7 @@ import android.widget.TextView;
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.Subject;
 
-public class SubjectsArrayAdapter extends ArrayAdapter<String> {
+public class SubjectsArrayAdapter extends ArrayAdapter<Subject> {
 	
 	private final Context context;
 	private final List<Subject> subjects;
@@ -40,17 +40,18 @@ public class SubjectsArrayAdapter extends ArrayAdapter<String> {
 				inflater.inflate(R.layout.subject_name_layout, parent, false);
 		
 		TextView textView = (TextView) rowView.findViewById(R.id.subject_name_text);
-		textView.setText(this.getItem(position));
+		Subject subject = this.getItem(position);
+		textView.setText(subject.getFullName());
 		
 		return rowView;
 	}
 	
-	private List<String> getSubjectNamesContaining(String substr) {
-		List<String> subjectsContaining = new ArrayList<String>();
+	private List<Subject> getSubjectNamesContaining(String substr) {
+		List<Subject> subjectsContaining = new ArrayList<Subject>();
 		for (Subject subject : subjects) {
 			if (subject.getName().contains(substr) ||
 					subject.getNumber().startsWith(substr)) {
-				subjectsContaining.add(subject.getNumber() + " " + subject.getName());
+				subjectsContaining.add(subject);
 			}
 		}
 		return subjectsContaining;

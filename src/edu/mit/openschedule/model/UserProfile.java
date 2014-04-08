@@ -168,4 +168,13 @@ public class UserProfile {
 		}
 		return false;
 	}
+
+	public Task getTask(int taskId) {
+		for (Task task : tasks) {
+			if (task.getId() == taskId) {
+				return task;
+			}
+		}
+		throw new RuntimeException("no such id");
+	}
 }

@@ -10,6 +10,8 @@ import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
 
 public class SubjectActivity extends ActionBarActivity {
+	
+	public static final String SUBJECT_ID = "subject_id";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +23,11 @@ public class SubjectActivity extends ActionBarActivity {
 			///////////////////////////// test
 			UserProfile.getUserProfile();
 			
-			int id = getIntent().getIntExtra(CalendarFragment.SUBJECT_ID, 0);
+			int id = getIntent().getIntExtra(SUBJECT_ID, 0);
 			Subject subject = Subjects.asList().get(id);
 			
 			Bundle bundle = new Bundle();
-			bundle.putInt(CalendarFragment.SUBJECT_ID, subject.getId());
+			bundle.putInt(SUBJECT_ID, subject.getId());
 			
 			SubjectFragment subjectFragment = new SubjectFragment();
 			subjectFragment.setArguments(bundle);
