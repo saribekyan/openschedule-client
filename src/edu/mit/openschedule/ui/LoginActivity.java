@@ -1,8 +1,7 @@
 package edu.mit.openschedule.ui;
 
+import java.util.List;
 import java.util.Locale;
-
-import org.json.JSONArray;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -27,6 +26,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.ParseServer;
+import edu.mit.openschedule.model.Subject;
 
 public class LoginActivity extends ActionBarActivity {
 
@@ -92,6 +93,11 @@ public class LoginActivity extends ActionBarActivity {
             mPassword.setEnabled(true);
             mLogin.setEnabled(true);
             mProgress.dismiss();
+            List<String> ss = ParseServer.getSubjectNumbers();
+            for (String s : ss) {
+                Log.d("TAG", s);
+            }
+            List<Subject> ls = ParseServer.getSubjects(ss);
             Intent intent = new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class);
             startActivity(intent);
         }
@@ -109,7 +115,6 @@ public class LoginActivity extends ActionBarActivity {
         private class LogInUser extends LogInCallback {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if (e != null) Log.d("TAG", e.getMessage()+" "+e.getCode());
                 if (e == null) {
                     // If the user already exists, just log in
                     loginSuccessful();
@@ -124,8 +129,8 @@ public class LoginActivity extends ActionBarActivity {
                     object.put("password", password);
                     object.saveInBackground();
                     new Thread(new Runnable() {
-                        private static final int TRYOUTS = 3;
-                        private static final int INTERVAL = 1000; // in milliseconds
+                        private static final int TRYOUTS = 5;
+                        private static final int INTERVAL = 2000; // in milliseconds
                         @Override
                         public void run() {
                             for (int i = 0; i < TRYOUTS; i++) {
