@@ -1,5 +1,9 @@
 package edu.mit.openschedule.ui;
 
+import java.util.Locale;
+
+import org.json.JSONArray;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,8 +71,6 @@ public class LoginActivity extends ActionBarActivity {
         private EditText mPassword;
         private Button mLogin;
         private ProgressDialog mProgress;
-        private ParseUser mAdminUser;
-        private final static String sAdminUserObjectID = "mGvuPUiYox";
         
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,13 +81,8 @@ public class LoginActivity extends ActionBarActivity {
             mLogin = (Button)rootView.findViewById(R.id.login_button_login);
             mLogin.setOnClickListener(new LoginButtonOnClickListener());
             
-            // Set up default security for accessing newly created ParseObjects.
-            mAdminUser = new ParseUser();
-            mAdminUser.setObjectId(sAdminUserObjectID);
-            ParseACL defaultACL = new ParseACL();
-            defaultACL.setReadAccess(mAdminUser, true);
-            defaultACL.setWriteAccess(mAdminUser, true);
-            ParseACL.setDefaultACL(defaultACL, false);
+            // By default, users don't have access to anything they create
+            ParseACL.setDefaultACL(new ParseACL(), false);
 
             return rootView;
         }
@@ -107,8 +104,8 @@ public class LoginActivity extends ActionBarActivity {
                     // (by putting in Pending table, where adminUser will take care of it)
                     mProgress.setMessage(getString(R.string.login_progress_check_mit));
                     ParseObject object = new ParseObject("Pending");
-                    object.put("username", mUserName.getText().toString());
-                    object.put("password", mPassword.getText().toString());
+                    object.put("username", mUserName.getText().toString().toLowerCase(Locale.US));
+                    object.put("password", mPassword.getText().toString().toLowerCase(Locale.US));
                     object.saveInBackground();
                 } else {
                     // If some kind of other error happens (i.e. Network connection drops)
@@ -133,9 +130,9 @@ public class LoginActivity extends ActionBarActivity {
                 mProgress.setMessage(getString(R.string.login_progress_logging_in));
                 mProgress.show();
                 mProgress.setCancelable(false);
-                ParseUser.logInInBackground(mUserName.getText().toString(),
-                                            mPassword.getText().toString(),
-                                            new LogInUser());
+                ParseUser.logInInBackground(mUserName.getText().toString().toLowerCase(Locale.US),
+                        mPassword.getText().toString().toLowerCase(Locale.US),
+                        new LogInUser());
             }
         }
         
