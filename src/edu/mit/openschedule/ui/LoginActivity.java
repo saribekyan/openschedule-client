@@ -86,6 +86,25 @@ public class LoginActivity extends ActionBarActivity {
 
             return rootView;
         }
+        
+        private void loginSuccessful() {
+            mUserName.setEnabled(true);
+            mPassword.setEnabled(true);
+            mLogin.setEnabled(true);
+            mProgress.dismiss();
+            Intent intent = new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class);
+            startActivity(intent);
+        }
+        
+        private void loginUnsuccessful() {
+            // If some kind of other error happens (i.e. Network connection drops)
+            // then cancel the progress dialog and return to the starting position
+            mProgress.dismiss();
+            mUserName.setEnabled(true);
+            mPassword.setEnabled(true);
+            mLogin.setEnabled(true);
+            Toast.makeText(getActivity(), R.string.login_toast_unable, Toast.LENGTH_SHORT).show();
+        }
 
         private class LogInUser extends LogInCallback {
             @Override
@@ -93,28 +112,56 @@ public class LoginActivity extends ActionBarActivity {
                 if (e != null) Log.d("TAG", e.getMessage()+" "+e.getCode());
                 if (e == null) {
                     // If the user already exists, just log in
-                    mUserName.setEnabled(true);
-                    mPassword.setEnabled(true);
-                    mLogin.setEnabled(true);
-                    mProgress.dismiss();
-                    Intent intent = new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class);
-                    startActivity(intent);
+                    loginSuccessful();
                 } else if (e.getCode() == 101) {
                     // If such user doesn't exist, create new user
                     // (by putting in Pending table, where adminUser will take care of it)
                     mProgress.setMessage(getString(R.string.login_progress_check_mit));
                     ParseObject object = new ParseObject("Pending");
-                    object.put("username", mUserName.getText().toString().toLowerCase(Locale.US));
-                    object.put("password", mPassword.getText().toString().toLowerCase(Locale.US));
+                    final String username = mUserName.getText().toString().toLowerCase(Locale.US);
+                    final String password = mPassword.getText().toString();
+                    object.put("username", username);
+                    object.put("password", password);
                     object.saveInBackground();
+                    new Thread(new Runnable() {
+                        private static final int TRYOUTS = 3;
+                        private static final int INTERVAL = 1000; // in milliseconds
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < TRYOUTS; i++) {
+                                long t1 = System.currentTimeMillis();
+                                try {
+                                    ParseUser.logIn(username, password);
+                                    // run loginSuccessful() on UI thread
+                                    PlaceholderFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            loginSuccessful();
+                                        }
+                                    });
+                                    return;
+                                } catch (ParseException e1) { } // Ignore
+                                long t2 = System.currentTimeMillis();
+                                if (t2-t1 < INTERVAL) {
+                                    try {
+                                        Thread.sleep(INTERVAL - t2 + t1);
+                                    } catch (InterruptedException e) {
+                                        break;
+                                    }
+                                }
+                            }
+                            // After TRYOUTS tries, return unsuccessful login
+                            PlaceholderFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loginUnsuccessful();
+                                }
+                            });
+
+                        }
+                    }).start();
                 } else {
-                    // If some kind of other error happens (i.e. Network connection drops)
-                    // then cancel the progress dialog and return to the starting position
-                    mProgress.dismiss();
-                    mUserName.setEnabled(true);
-                    mPassword.setEnabled(true);
-                    mLogin.setEnabled(true);
-                    Toast.makeText(getActivity(), R.string.login_toast_unable, Toast.LENGTH_SHORT).show();
+                    loginUnsuccessful();
                 }
             }
         }
@@ -131,7 +178,7 @@ public class LoginActivity extends ActionBarActivity {
                 mProgress.show();
                 mProgress.setCancelable(false);
                 ParseUser.logInInBackground(mUserName.getText().toString().toLowerCase(Locale.US),
-                        mPassword.getText().toString().toLowerCase(Locale.US),
+                        mPassword.getText().toString(),
                         new LogInUser());
             }
         }
