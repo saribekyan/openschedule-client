@@ -29,25 +29,35 @@ public class UserProfile {
 		meetingNumber.put(MeetingType.RECITATION, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.LAB, new ArrayList<Integer>());
 		
-		name = "Tsotne Tabidze";
-		subjects = new ArrayList<Subject>();
-		Subject s1 = new Subject("6.046", "Algo", "Also is cool");
-		Meeting l1 = s1.new Meeting(MeetingType.LECTURE, "26-100", "MTR10");
-//						.add(new WeekdayTime('T', "9:30", "11:00"))
-//						.add(new WeekdayTime('R', "9:30", "11"))
-//						.add(new WeekdayTime('M', "9:30", "11"));
-		Meeting r1 = s1.new Meeting(MeetingType.RECITATION, "36-156", "F3")
-						.add(new WeekdayTime('F', "3", "4"));
-		s1.addLecture(l1)
-			.addRecitation(r1)
-			.setRating((float) 3.5);
-		Subjects.addSubject(s1);
+//		name = "Tsotne Tabidze";
+//		subjects = new ArrayList<Subject>();
+//		Subject s1 = Subjects.getSubject(0);
+//		Meeting l1 = s1.getLecture(0);
+//		s1.addLecture(l1)
+//			.setRating((float) 3.5);
+//		Subjects.addSubject(s1);
 		
 		
-		subjects.add(s1);
-		meetingNumber.get(MeetingType.LECTURE).add(0);
-		meetingNumber.get(MeetingType.RECITATION).add(-1);
-		meetingNumber.get(MeetingType.LAB).add(null);
+//		subjects.add(s1);
+//		meetingNumber.get(MeetingType.LECTURE).add(0);
+//		meetingNumber.get(MeetingType.RECITATION).add(null);
+//		meetingNumber.get(MeetingType.LAB).add(null);
+		
+        subjects = new ArrayList<Subject>();
+		for(int i=0;i<Subjects.size(); i++) {
+            try {
+    	        Subject s1 = Subjects.getSubject(i);
+    	        Meeting l1 = s1.getLecture(0);
+    	        s1.addLecture(l1)
+    	            .setRating((float) 3.5);
+//    	        Subjects.addSubject(s1);
+    	        
+    	        subjects.add(s1);
+    	        meetingNumber.get(MeetingType.LECTURE).add(0);
+    	        meetingNumber.get(MeetingType.RECITATION).add(null);
+    	        meetingNumber.get(MeetingType.LAB).add(null);
+            } catch (Exception e) {}
+		}
 		
 //		Subject s4 = new Subject("6.046", "Algo", "Also is cool");
 //		Meeting l4 = s4.new Meeting(MeetingType.LECTURE, "26-100")
@@ -63,23 +73,23 @@ public class UserProfile {
 //		recitationNumber.add(0);
 //		labNumber.add(null);
 
-		Subject s2 = new Subject("6.036", "ML", "ML is cool");
-		Meeting l2 = s2.new Meeting(MeetingType.LECTURE, "10-250", "TR10.30-12")
-						.add(new WeekdayTime('T', "10:30", "12:00"))
-						.add(new WeekdayTime('R', "10:30", "12:00"));
-		Meeting r2 = s2.new Meeting(MeetingType.RECITATION, "36-156", "F3")
-						.add(new WeekdayTime('F', "3"));
-		Meeting lab2 = s2.new Meeting(MeetingType.LAB, "32-082", "F5")
-						.add(new WeekdayTime('F', "5"));
-		s2.addLecture(l2)
-			.addRecitation(r2)
-			.addLab(lab2);
-		Subjects.addSubject(s2);
-		
-		subjects.add(s2);
-		meetingNumber.get(MeetingType.LECTURE).add(0);
-		meetingNumber.get(MeetingType.RECITATION).add(0);
-		meetingNumber.get(MeetingType.LAB).add(0);
+//		Subject s2 = new Subject("6.036", "ML", "ML is cool");
+//		Meeting l2 = s2.new Meeting(MeetingType.LECTURE, "10-250", "TR10.30-12")
+//						.add(new WeekdayTime('T', "10:30", "12:00"))
+//						.add(new WeekdayTime('R', "10:30", "12:00"));
+//		Meeting r2 = s2.new Meeting(MeetingType.RECITATION, "36-156", "F3")
+//						.add(new WeekdayTime('F', "3"));
+//		Meeting lab2 = s2.new Meeting(MeetingType.LAB, "32-082", "F5")
+//						.add(new WeekdayTime('F', "5"));
+//		s2.addLecture(l2)
+//			.addRecitation(r2)
+//			.addLab(lab2);
+//		Subjects.addSubject(s2);
+//		
+//		subjects.add(s2);
+//		meetingNumber.get(MeetingType.LECTURE).add(0);
+//		meetingNumber.get(MeetingType.RECITATION).add(0);
+//		meetingNumber.get(MeetingType.LAB).add(0);
 		
 //		Subject s3 = new Subject("6.036", "ML", "ML is cool");
 //		Meeting l3 = s3.new Meeting(MeetingType.LECTURE, "10-250")

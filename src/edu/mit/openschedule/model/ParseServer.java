@@ -42,7 +42,7 @@ public class ParseServer {
     public static List<Subject> getSubjects(List<String> subjectNumberList) {
         List<Subject> result = new ArrayList<Subject>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
-        // query.whereContainedIn("number", subjectNumberList);
+        query.whereContainedIn("number", subjectNumberList);
         try {
             List<ParseObject> parseObjectList = query.find();
             for (ParseObject parseObject : parseObjectList) {
@@ -52,9 +52,15 @@ public class ParseServer {
                     array = parseObject.getJSONArray("lectures");
                     for (int j = 0; j < array.length(); j++) {
                         String s = array.getString(j);
+                        s = s.replaceAll("\\s+", " ");
                         int x1 = s.indexOf(' ', 0);
                         int x2 = s.lastIndexOf(' ');
-                        Meeting m = subject.new Meeting(MeetingType.LECTURE, s.substring(x2+1), s.substring(x1+1, x2));
+                        Meeting m;
+                        try {
+                            m = subject.new Meeting(MeetingType.LECTURE, s.substring(x2+1), s.substring(x1+1, x2));
+                        } catch (Exception e) {
+                            continue;
+                        }
                         subject.addLecture(m);
                     }
                 } catch (JSONException e) { return null; }

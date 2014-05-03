@@ -36,4 +36,8 @@ public class Subjects {
 	public static Subject getSubject(Integer id) {
 		return subjects.get(id);
 	}
+	
+	public static int size() {
+	    return subjects.size();
+	}
 }
