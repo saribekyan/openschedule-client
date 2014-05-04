@@ -32,7 +32,7 @@ import edu.mit.openschedule.model.WeekdayTime;
 
 public class CalendarFragment extends Fragment {
 	
-	private char dayOfWeekChar;
+	private Calendar calendar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,40 +40,35 @@ public class CalendarFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_calendar, container,
 				false);
 		
-		TextView date = (TextView) rootView.findViewById(R.id.calendar_date);
+		LinearLayout topLayout = (LinearLayout) rootView.findViewById(R.id.calendar_top_row);
+		TextView date = (TextView) topLayout.findViewById(R.id.calendar_date);
 		
-		Calendar calendar = Calendar.getInstance();
+		calendar = Calendar.getInstance();
 		date.setText(
 					new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault()).format(calendar.getTime()));
-		dayOfWeekChar = getWeekDayChar(calendar);
 		
 		final ListView listView = (ListView) rootView.findViewById(R.id.calendar_list);
 		
 		CalendarAdapter adapter = new CalendarAdapter(getActivity());
 		listView.setAdapter(adapter);
 		
+		setChangeDayEventHandler((Button)topLayout.findViewById(R.id.calendar_next_day_button), date, +1, adapter);
+		setChangeDayEventHandler((Button)topLayout.findViewById(R.id.calendar_previous_day_button), date, -1, adapter);
+		
 		return rootView;
 	}
-	
-	private char getWeekDayChar(Calendar calendar) {
-		switch (calendar.get(Calendar.DAY_OF_WEEK)) {
-		case Calendar.SUNDAY:
-			return 'S';
-		case Calendar.MONDAY:
-			return 'M';
-		case Calendar.TUESDAY:
-			return 'T';
-		case Calendar.WEDNESDAY:
-			return 'W';
-		case Calendar.THURSDAY:
-			return 'R';
-		case Calendar.FRIDAY:
-			return 'F';
-		case Calendar.SATURDAY:
-			return 'S';
-		default:
-			throw new IllegalStateException();
-		}
+
+	private void setChangeDayEventHandler(Button button, final TextView date, final int deltaDay, final CalendarAdapter adapter) {
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				calendar.add(Calendar.DATE, deltaDay);
+				date.setText(
+						new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault()).format(calendar.getTime()));
+				adapter.notifyDataSetChanged();
+			}
+		});
 	}
 	
 	private class CalendarAdapter extends ArrayAdapter<Time> {
@@ -119,7 +114,7 @@ public class CalendarFragment extends Fragment {
 			
 			UserProfile profile = UserProfile.getUserProfile();
 			
-			WeekdayTime wt = new WeekdayTime(dayOfWeekChar, times.get(position));
+			WeekdayTime wt = new WeekdayTime(getWeekDayChar(), times.get(position));
 			
 			List<Meeting> meetings = profile.meetingsAt(wt);
 			for (final Meeting meeting : meetings) {
@@ -152,6 +147,27 @@ public class CalendarFragment extends Fragment {
 			}
 
 		    return rowView;
+		}
+		
+		private char getWeekDayChar() {
+			switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+			case Calendar.SUNDAY:
+				return 'S';
+			case Calendar.MONDAY:
+				return 'M';
+			case Calendar.TUESDAY:
+				return 'T';
+			case Calendar.WEDNESDAY:
+				return 'W';
+			case Calendar.THURSDAY:
+				return 'R';
+			case Calendar.FRIDAY:
+				return 'F';
+			case Calendar.SATURDAY:
+				return 'S';
+			default:
+				throw new IllegalStateException();
+			}
 		}
 	}
 }
