@@ -34,5 +34,7 @@
     <string name="title_activity_subject">SubjectActivity</string>
     <string name="subject_class_description_text">Class Description</string>
     <string name="subject_rating">Rating:</string>
+    <string name="next_day">-&gt;</string>
+    <string name="previous_day">&lt;-</string>
 
 </resources>

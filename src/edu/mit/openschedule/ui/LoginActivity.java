@@ -84,7 +84,6 @@ public class LoginActivity extends ActionBarActivity {
             
             // By default, users don't have access to anything they create
             ParseACL.setDefaultACL(new ParseACL(), false);
-
             return rootView;
         }
         

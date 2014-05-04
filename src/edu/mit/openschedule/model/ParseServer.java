@@ -11,7 +11,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import edu.mit.openschedule.model.Subject.Meeting;
 import edu.mit.openschedule.model.Subjects.MeetingType;
 
 public class ParseServer {
@@ -55,13 +54,11 @@ public class ParseServer {
                         s = s.replaceAll("\\s+", " ");
                         int x1 = s.indexOf(' ', 0);
                         int x2 = s.lastIndexOf(' ');
-                        Meeting m;
                         try {
-                            m = subject.new Meeting(MeetingType.LECTURE, s.substring(x2+1), s.substring(x1+1, x2));
+                            subject.addMeeting(MeetingType.LECTURE, s.substring(x2+1), s.substring(x1+1, x2));
                         } catch (Exception e) {
                             continue;
                         }
-                        subject.addLecture(m);
                     }
                 } catch (JSONException e) { return null; }
                 result.add(subject);

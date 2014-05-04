@@ -29,7 +29,6 @@ public class Subject {
 		meetings.put(MeetingType.LAB, new ArrayList<Meeting>());
 		
 		this.id = Subjects.asList().size();
-		Subjects.addSubject(this);
 	}
 	
 	public Subject setRating(float rating) {

@@ -14,6 +14,7 @@ import edu.mit.openschedule.model.Task.Status;
 public class UserProfile {
 	private static UserProfile singletonProfile = null;
 	
+	@SuppressWarnings("unused")
 	private String name;
 	private List<Subject> subjects;
 	
@@ -29,33 +30,32 @@ public class UserProfile {
 		meetingNumber.put(MeetingType.RECITATION, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.LAB, new ArrayList<Integer>());
 		
-//		name = "Tsotne Tabidze";
-//		subjects = new ArrayList<Subject>();
-//		Subject s1 = Subjects.getSubject(0);
-//		Meeting l1 = s1.getLecture(0);
-//		s1.addLecture(l1)
-//			.setRating((float) 3.5);
-//		Subjects.addSubject(s1);
+		name = "Tsotne Tabidze";
+		subjects = new ArrayList<Subject>();
+		Subject s1 = new Subject("6.006", "algo", "algo is cool");
+		s1.addMeeting(MeetingType.LECTURE, "1-123", "MWF10")
+			.setRating((float) 3.5);
+		Subjects.addSubject(s1);
 		
 		
-//		subjects.add(s1);
-//		meetingNumber.get(MeetingType.LECTURE).add(0);
-//		meetingNumber.get(MeetingType.RECITATION).add(null);
-//		meetingNumber.get(MeetingType.LAB).add(null);
+		subjects.add(s1);
+		meetingNumber.get(MeetingType.LECTURE).add(0);
+		meetingNumber.get(MeetingType.RECITATION).add(null);
+		meetingNumber.get(MeetingType.LAB).add(null);
 		
-        subjects = new ArrayList<Subject>();
-		for(int i=0;i<Subjects.size(); i++) {
-            try {
-    	        Subject s1 = Subjects.getSubject(i);
-    	        s1.setRating((float) 3.5);
+//        subjects = new ArrayList<Subject>();
+//		for(int i=0;i<Subjects.size(); i++) {
+//            try {
+//    	        Subject s1 = Subjects.getSubject(i);
+//    	        s1.setRating((float) 3.5);
 //    	        Subjects.addSubject(s1);
-    	        
-    	        subjects.add(s1);
-    	        meetingNumber.get(MeetingType.LECTURE).add(0);
-    	        meetingNumber.get(MeetingType.RECITATION).add(null);
-    	        meetingNumber.get(MeetingType.LAB).add(null);
-            } catch (Exception e) {}
-		}
+//    	        
+//    	        subjects.add(s1);
+//    	        meetingNumber.get(MeetingType.LECTURE).add(0);
+//    	        meetingNumber.get(MeetingType.RECITATION).add(null);
+//    	        meetingNumber.get(MeetingType.LAB).add(null);
+//            } catch (Exception e) {}
+//		}
 		
 //		Subject s4 = new Subject("6.046", "Algo", "Also is cool");
 //		Meeting l4 = s4.new Meeting(MeetingType.LECTURE, "26-100")
