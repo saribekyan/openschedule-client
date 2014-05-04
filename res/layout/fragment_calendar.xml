@@ -10,13 +10,20 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent" >
 
-        <Button
+        <ImageView
             android:id="@+id/calendar_previous_day_button"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="@string/previous_day" />
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_action_previous_item"
+            android:background="?android:selectableItemBackground"
+            android:scaleX="4"
+            android:scaleY="4"
+            android:paddingLeft="5dp"
+            android:paddingRight="3dp"
+            android:contentDescription="@string/calendar_previous_day" />
         
 	    <TextView
 	        android:id="@+id/calendar_date"
@@ -24,15 +31,23 @@
 	        android:layout_height="wrap_content"
 	        android:gravity="center"
 	        android:layout_weight="1.0"
+            android:layout_margin="8dp"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	    
-        <Button 
+        <ImageView 
             android:id="@+id/calendar_next_day_button"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="@string/next_day" />
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_action_next_item"
+            android:background="?android:selectableItemBackground"
+            android:scaleX="4"
+            android:scaleY="4"
+            android:paddingLeft="3dp"
+            android:paddingRight="5dp"
+            android:contentDescription="@string/calendar_next_day" />
             
     </LinearLayout>
 

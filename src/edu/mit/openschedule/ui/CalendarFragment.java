@@ -52,13 +52,13 @@ public class CalendarFragment extends Fragment {
 		CalendarAdapter adapter = new CalendarAdapter(getActivity());
 		listView.setAdapter(adapter);
 		
-		setChangeDayEventHandler((Button)topLayout.findViewById(R.id.calendar_next_day_button), date, +1, adapter);
-		setChangeDayEventHandler((Button)topLayout.findViewById(R.id.calendar_previous_day_button), date, -1, adapter);
+		setChangeDayEventHandler(topLayout.findViewById(R.id.calendar_next_day_button), date, +1, adapter);
+		setChangeDayEventHandler(topLayout.findViewById(R.id.calendar_previous_day_button), date, -1, adapter);
 		
 		return rootView;
 	}
 
-	private void setChangeDayEventHandler(Button button, final TextView date, final int deltaDay, final CalendarAdapter adapter) {
+	private void setChangeDayEventHandler(View button, final TextView date, final int deltaDay, final CalendarAdapter adapter) {
 		button.setOnClickListener(new OnClickListener() {
 			
 			@Override

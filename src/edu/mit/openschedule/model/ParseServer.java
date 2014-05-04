@@ -1,14 +1,19 @@
 package edu.mit.openschedule.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.util.Log;
+
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQuery.CachePolicy;
 import com.parse.ParseUser;
 
 import edu.mit.openschedule.model.Subjects.MeetingType;
@@ -38,27 +43,6 @@ public class ParseServer {
         return result;
     }
     
-//    /**
-//     * Get numbers of all classes.
-//     * @return
-//     */
-//    public static List<String> getAllSubjectNumbers() {
-//        List<String> result = new ArrayList<String>();
-//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
-//        try {
-//            ParseObject parseObject = query.getFirst();
-//            JSONArray array = (JSONArray)parseObject.getJSONArray("number");
-//            for (int i = 0; i < array.length(); i++) {
-//                try {
-//                    result.add(array.getString(i));
-//                } catch (JSONException e) { return null; }
-//            }
-//        } catch (ParseException e) {
-//            return null;
-//        }
-//        return result;    	
-//    }
-    
     /**
      * Get the list containing the information about each subject
      * provided in subjectNumberList.
@@ -74,14 +58,19 @@ public class ParseServer {
 	        try {
 	            // Retrieve subjects written in subjectNumberList.
 	            ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
+//                query.setCachePolicy(CachePolicy.NETWORK_ELSE_CACHE);
+//	            query.fromLocalDatastore();
 	            if (subjectNumberList != null) {
 	                query.whereContainedIn("number", subjectNumberList);
+	                query.setMaxCacheAge(12*60*60*1000L);
 	            } else {
-	            	query.setSkip(skip);
+	                query.whereGreaterThanOrEqualTo("classId", skip);
+	                query.whereLessThan("classId", skip+bucket);
+//	            	query.setSkip(skip);
 	            	query.setLimit(bucket);
-	            	skip += bucket;
 	            }
 	            parseObjectList = query.find();
+                ParseObject.pinAllInBackground(parseObjectList);
 	        } catch (ParseException e) {
 	            e.printStackTrace();
 	            // Find failed, so we return empty list.
@@ -118,11 +107,27 @@ public class ParseServer {
 	            }
 	            result.add(subject);
 	        }
-	        if (parseObjectList.size() < bucket) {
-	        	break;
-	        }
+	        Log.d("TAG", ""+skip+" "+parseObjectList.size());
+//	        if (parseObjectList.size() < bucket) {
+//	        	break;
+//	        }
+            skip += bucket;
+            if (parseObjectList.size() < bucket) {
+                break;
+            }
     	}
     	
     	return result;
     }
+    
+//    private static String getSemester() {
+//        Calendar calendar = new GregorianCalendar();
+//        int month = calendar.get(GregorianCalendar.MONTH);
+//        int year = calendar.get(GregorianCalendar.YEAR);
+//        if (month < 5) {
+//            return "sp"+year;
+//        } else {
+//            return "fa"+year;
+//        }
+//    }
 }

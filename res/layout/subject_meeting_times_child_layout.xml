@@ -8,6 +8,7 @@
 	    android:id="@+id/subject_meeting_child_time_loc_text"
 	    android:layout_height="wrap_content"
 	    android:layout_width="match_parent"
+        android:layout_margin="8dp"
 	    android:gravity="right"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
