@@ -2,6 +2,7 @@ package edu.mit.openschedule.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -47,9 +48,10 @@ public class SubjectsArrayAdapter extends ArrayAdapter<Subject> {
 	}
 	
 	private List<Subject> getSubjectNamesContaining(String substr) {
+		substr = substr.toLowerCase(Locale.getDefault());
 		List<Subject> subjectsContaining = new ArrayList<Subject>();
 		for (Subject subject : subjects) {
-			if (subject.getName().contains(substr) ||
+			if (subject.getName().toLowerCase(Locale.getDefault()).contains(substr) ||
 					subject.getNumber().startsWith(substr)) {
 				subjectsContaining.add(subject);
 			}
