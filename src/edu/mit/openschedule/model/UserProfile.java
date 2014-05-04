@@ -41,7 +41,7 @@ public class UserProfile {
 	}
 	
 	public void addSubjects(List<Subject> subjects) {
-	    this.subjects = new ArrayList<Subject>(subjects);
+	    this.subjects.addAll(subjects);
 	    for(int i=0;i<subjects.size(); i++) {
 	        for (MeetingType m : MeetingType.values()) {
 	            int count = subjects.get(i).getMeetingCount(m);
