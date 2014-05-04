@@ -7,11 +7,11 @@ public class WeekdayTime {
 	public final Time startTime;
 	public final Time endTime;
 	
-	public WeekdayTime(char weekday, String startTimeString, String endTimeString) {
-		this.weekday = weekday;
-		this.startTime = new Time(startTimeString);
-		this.endTime = new Time(endTimeString);
-	}
+//	public WeekdayTime(char weekday, String startTimeString, String endTimeString) {
+//		this.weekday = weekday;
+//		this.startTime = new Time(startTimeString);
+//		this.endTime = new Time(endTimeString);
+//	}
 	
 	public WeekdayTime(char weekday, Time startTime) {
 		this.weekday = weekday;
@@ -19,10 +19,22 @@ public class WeekdayTime {
 		this.endTime = startTime.timeAfter(60);
 	}
 	
-	public WeekdayTime(char weekday, String startTimeString) {
-		this(weekday, new Time(startTimeString));
-	}
+//	public WeekdayTime(char weekday, String startTimeString) {
+//		this(weekday, new Time(startTimeString));
+//	}
 	
+	public WeekdayTime(char weekday, String startTimeString, String endTimeString, boolean eve) {
+		this.weekday = weekday;
+		this.startTime = new Time(startTimeString, eve);
+		this.endTime = new Time(endTimeString, eve);
+	}
+
+	public WeekdayTime(char weekday, String startTimeString, boolean eve) {
+		this.weekday = weekday;
+		this.startTime = new Time(startTimeString, eve);
+		this.endTime = startTime.timeAfter(60);
+	}
+
 	public boolean isOverlapping(WeekdayTime other) {
 		return this.weekday == other.weekday &&
 				(!this.startTime.after(other.startTime) && this.endTime.after(other.startTime) || 

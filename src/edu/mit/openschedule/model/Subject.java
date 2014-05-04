@@ -37,30 +37,6 @@ public class Subject {
 		return this;
 	}
 	
-	public Subject addLecture(Meeting lecture) {
-		if (lecture.meetingType != MeetingType.LECTURE) {
-			throw new IllegalArgumentException("not a lecture");
-		}
-		meetings.get(MeetingType.LECTURE).add(lecture);
-		return this;
-	}
-	
-	public Subject addRecitation(Meeting recitation) {
-		if (recitation.meetingType != MeetingType.RECITATION) {
-			throw new IllegalArgumentException("not a recitation");
-		}
-		meetings.get(MeetingType.RECITATION).add(recitation);
-		return this;
-	}
-	
-	public Subject addLab(Meeting lab) {
-		if (lab.meetingType != MeetingType.LAB) {
-			throw new IllegalArgumentException("not a lab");
-		}		
-		meetings.get(MeetingType.LAB).add(lab);
-		return this;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -73,16 +49,9 @@ public class Subject {
 		return description;
 	}
 	
-	public Meeting getLecture(int i) {
-		return meetings.get(MeetingType.LECTURE).get(i);
-	}
-	
-	public Meeting getRecitation(int i) {
-		return meetings.get(MeetingType.RECITATION).get(i);
-	}
-	
-	public Meeting getLab(int i) {
-		return meetings.get(MeetingType.LAB).get(i);
+	public Subject addMeeting(MeetingType meetingType, String location, String mitFormatWeekdayTime) {
+		meetings.get(meetingType).add(new Meeting(meetingType, location, mitFormatWeekdayTime));
+		return this;
 	}
 	
 	public class Meeting {
@@ -92,29 +61,47 @@ public class Subject {
 		private List<WeekdayTime> meetingWeekdayTimes;
 		private String mitFormatWeekdayTime;
 		
-		public Meeting(MeetingType meetingType, String location, String mitFormatWeekdayTime) {
+		private Meeting(MeetingType meetingType, String location, String mitFormatWeekdayTime) {
 			this.meetingType = meetingType;
 			this.location = location;
 			this.meetingWeekdayTimes = new ArrayList<WeekdayTime>();
 			this.mitFormatWeekdayTime = mitFormatWeekdayTime;
+
+			String meetTime;
+			String days;
+			boolean eve;
 			
-			String days = "MTWRF";
-			int i = 0;
-			while (days.indexOf(mitFormatWeekdayTime.charAt(i)) != -1)
-				++i;
-			int k = mitFormatWeekdayTime.indexOf('-');
-			for (int j = 0; j < i; ++j) {
-				if (k != -1)
-					this.add(new WeekdayTime(mitFormatWeekdayTime.charAt(j), mitFormatWeekdayTime.substring(i, k), 
-							mitFormatWeekdayTime.substring(k+1)));
-				else
-					this.add(new WeekdayTime(mitFormatWeekdayTime.charAt(j), mitFormatWeekdayTime.substring(i)));
+			if (mitFormatWeekdayTime.contains("EVE")) {
+				int leftParen = mitFormatWeekdayTime.indexOf('(');
+				int rightParen = mitFormatWeekdayTime.indexOf(')');
+				meetTime = mitFormatWeekdayTime.substring(leftParen + 1, rightParen);
+				meetTime = meetTime.substring(0, meetTime.indexOf(' '));
+				days = mitFormatWeekdayTime.substring(0, mitFormatWeekdayTime.indexOf(' '));
+				eve = true;
+			} else {
+				int i = 0;
+				while (!Character.isDigit(mitFormatWeekdayTime.charAt(i))) {
+					++i;
+				}
+				days = mitFormatWeekdayTime.substring(0, i);
+				meetTime = mitFormatWeekdayTime.substring(i);
+				eve = false;
 			}
-		}
-		
-		public Meeting add(WeekdayTime weekdayTime) {
-			meetingWeekdayTimes.add(weekdayTime);
-			return this;
+			String[] times = meetTime.split("-");
+			for (int i = 0; i < days.length(); ++i) {
+				if (times.length > 1) {
+					meetingWeekdayTimes.add(new WeekdayTime(
+							days.charAt(i),
+							times[0],
+							times[1],
+							eve));
+				} else {
+					meetingWeekdayTimes.add(new WeekdayTime(
+							days.charAt(i),
+							times[0],
+							eve));					
+				}
+			}
 		}
 		
 		public boolean hasMeetingAt(WeekdayTime weekdayTime) {
@@ -149,6 +136,10 @@ public class Subject {
 
 		public String getLocationString() {
 			return location;
+		}
+		
+		public List<WeekdayTime> getWeekdayTimes() {
+			return meetingWeekdayTimes;
 		}
 	}
 

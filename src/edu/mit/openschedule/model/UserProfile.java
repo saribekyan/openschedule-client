@@ -47,9 +47,7 @@ public class UserProfile {
 		for(int i=0;i<Subjects.size(); i++) {
             try {
     	        Subject s1 = Subjects.getSubject(i);
-    	        Meeting l1 = s1.getLecture(0);
-    	        s1.addLecture(l1)
-    	            .setRating((float) 3.5);
+    	        s1.setRating((float) 3.5);
 //    	        Subjects.addSubject(s1);
     	        
     	        subjects.add(s1);
