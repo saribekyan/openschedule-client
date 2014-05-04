@@ -68,7 +68,7 @@ public class UserProfile {
 				
 				Integer id = meetingNumber.get(type).get(i);
 				if (id != null && id != -1) {
-					Meeting meeting = subject.getMeeting(type,id);
+					Meeting meeting = subject.getMeeting(type, id);
 					if (meeting.hasMeetingAt(weekdayTime)) {
 						meetings.add(meeting);
 					}
