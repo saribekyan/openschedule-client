@@ -29,6 +29,10 @@ public class Subjects {
 		return subjects;
 	}
 	
+	public static void addSubjects(List<Subject> newSubjects) {
+		subjects.addAll(newSubjects);
+	}
+	
 	public static void addSubject(Subject subject) {
 		subjects.add(subject);
 	}
@@ -39,5 +43,14 @@ public class Subjects {
 	
 	public static int size() {
 	    return subjects.size();
+	}
+
+	public static Subject findByNumber(String number) {
+		for (Subject subject : subjects) {
+			if (subject.getNumber().equals(number)) {
+				return subject;
+			}
+		}
+		throw new IllegalArgumentException("no such class number in database: " + number);
 	}
 }

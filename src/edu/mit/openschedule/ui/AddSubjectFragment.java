@@ -33,7 +33,7 @@ public class AddSubjectFragment extends Fragment {
 					long arg3) {
 				Subject subject = adapter.getItem(position);
 				Intent intent = new Intent(getActivity(), SubjectActivity.class);
-				intent.putExtra(SubjectActivity.SUBJECT_ID, subject.getId());
+				intent.putExtra(SubjectActivity.SUBJECT_NUMBER, subject.getNumber());
 				startActivity(intent);
 			}
 		});

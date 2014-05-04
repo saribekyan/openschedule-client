@@ -25,6 +25,7 @@ import com.parse.ParseUser;
 
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.ParseServer;
+import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
 
 public class LoginActivity extends ActionBarActivity {
@@ -98,7 +99,8 @@ public class LoginActivity extends ActionBarActivity {
             if (mProgress != null) {
                 mProgress.dismiss();
             }
-            UserProfile.getUserProfile().setSubjects(ParseServer.getSubjects(ParseServer.getSubjectNumbers()));
+            Subjects.addSubjects(ParseServer.getSubjects(null));
+            UserProfile.getUserProfile().setSubjects(ParseServer.getUserSubjectNumbers());
             startActivity(new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class));
         }
         

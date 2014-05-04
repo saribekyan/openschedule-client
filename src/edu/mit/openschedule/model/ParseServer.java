@@ -20,7 +20,7 @@ public class ParseServer {
      * For example: ["6.004", "6.005", "18.02", "21F.222"].
      * Returns null if some error happens.
      */
-    public static List<String> getSubjectNumbers() {
+    public static List<String> getUserSubjectNumbers() {
         List<String> result = new ArrayList<String>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserInfo");
         query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
@@ -38,57 +38,91 @@ public class ParseServer {
         return result;
     }
     
+//    /**
+//     * Get numbers of all classes.
+//     * @return
+//     */
+//    public static List<String> getAllSubjectNumbers() {
+//        List<String> result = new ArrayList<String>();
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
+//        try {
+//            ParseObject parseObject = query.getFirst();
+//            JSONArray array = (JSONArray)parseObject.getJSONArray("number");
+//            for (int i = 0; i < array.length(); i++) {
+//                try {
+//                    result.add(array.getString(i));
+//                } catch (JSONException e) { return null; }
+//            }
+//        } catch (ParseException e) {
+//            return null;
+//        }
+//        return result;    	
+//    }
+    
     /**
      * Get the list containing the information about each subject
      * provided in subjectNumberList.
-     * @param subjectNumberList The list of subject numbers that the user is interested in
+     * @param subjectNumberList The list of subject numbers that the user is interested in. If null, will return all classes.
      * @return the information about each subject in subjectNumberList,
      * or the empty list if error occurred during subject retrieval from the server.
      */
     public static List<Subject> getSubjects(List<String> subjectNumberList) {
-        List<ParseObject> parseObjectList = null;
-        try {
-            // Retrieve subjects written in subjectNumberList.
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
-            query.whereContainedIn("number", subjectNumberList);
-            parseObjectList = query.find();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // Find failed, so we return empty list.
-            return new ArrayList<Subject>();
-        }
-        List<Subject> result = new ArrayList<Subject>();
-        for (ParseObject parseObject : parseObjectList) {
-            Subject subject = new Subject(parseObject.getString("number"),
-                                          parseObject.getString("name"),
-                                          parseObject.getString("description"));
-            
-            for (MeetingType m : MeetingType.values()) {
-                JSONArray array;
-                if (m == MeetingType.LECTURE) {
-                    array = parseObject.getJSONArray("lectures");
-                } else if (m == MeetingType.RECITATION) {
-                    array = parseObject.getJSONArray("recitations");
-                } else {
-                    array = parseObject.getJSONArray("labs");
-                }
-                for (int j = 0; j < array.length(); j++) {
-                    try {
-                        String s = array.getString(j);
-                        // Replace many spaces with only one space.
-                        s = s.replaceAll("\\s+", " ");
-                        int x1 = s.indexOf(' ', 0);
-                        int x2 = s.lastIndexOf(' ');
-                        subject.addMeeting(m, s.substring(x2+1), s.substring(x1+1, x2));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                
-            }
-
-            result.add(subject);
-        }
-        return result;
+    	List<Subject> result = new ArrayList<Subject>();
+    	int skip = 0, bucket = 1000;
+    	while (true) {
+	        List<ParseObject> parseObjectList = null;
+	        try {
+	            // Retrieve subjects written in subjectNumberList.
+	            ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
+	            if (subjectNumberList != null) {
+	                query.whereContainedIn("number", subjectNumberList);
+	            } else {
+	            	query.setSkip(skip);
+	            	query.setLimit(bucket);
+	            	skip += bucket;
+	            }
+	            parseObjectList = query.find();
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	            // Find failed, so we return empty list.
+	            return result;
+	        }
+	        
+	        for (ParseObject parseObject : parseObjectList) {
+	            Subject subject = new Subject(parseObject.getString("number"),
+	                                          parseObject.getString("name"),
+	                                          parseObject.getString("description"));
+	
+	            for (MeetingType m : MeetingType.values()) {
+	                JSONArray array;
+	                if (m == MeetingType.LECTURE) {
+	                    array = parseObject.getJSONArray("lectures");
+	                } else if (m == MeetingType.RECITATION) {
+	                    array = parseObject.getJSONArray("recitations");
+	                } else {
+	                    array = parseObject.getJSONArray("labs");
+	                }
+	                for (int j = 0; j < array.length(); j++) {
+	                    try {
+	                        String s = array.getString(j);
+	                        // Replace many spaces with only one space.
+	                        s = s.replaceAll("\\s+", " ");
+	                        int x1 = s.indexOf(' ', 0);
+	                        int x2 = s.lastIndexOf(' ');
+	                        subject.addMeeting(m, s.substring(x2+1), s.substring(x1+1, x2));
+	                    } catch (Exception e) {
+	                        e.printStackTrace();
+	                    }
+	                }
+	                
+	            }
+	            result.add(subject);
+	        }
+	        if (parseObjectList.size() < bucket) {
+	        	break;
+	        }
+    	}
+    	
+    	return result;
     }
 }
