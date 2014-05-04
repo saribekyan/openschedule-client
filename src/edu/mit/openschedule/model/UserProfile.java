@@ -44,9 +44,10 @@ public class UserProfile {
 	    return new ArrayList<Subject>(subjects);
 	}
 	
-	public void setSubjects(List<Subject> subjects) {
-	    this.subjects = new ArrayList<Subject>(subjects);
-	    for(int i=0;i<subjects.size(); i++) {
+	public void setSubjects(List<String> subjectNumbers) {
+	    this.subjects = new ArrayList<Subject>();
+	    for(int i = 0; i < subjectNumbers.size(); ++i) {
+	    	subjects.add(Subjects.findByNumber(subjectNumbers.get(i)));
 	        for (MeetingType m : MeetingType.values()) {
 	            int count = subjects.get(i).getMeetingCount(m);
 	            Integer value = null;
@@ -106,7 +107,7 @@ public class UserProfile {
 
 	public Integer getMeetingIdFor(Subject subject, MeetingType type) {
 		for (int i = 0; i < subjects.size(); ++i) {
-			if (subjects.get(i).getId() == subject.getId()) {
+			if (subjects.get(i) == subject) { // no need for .equals, because for each class there should be only one instance of Subject
 				return meetingNumber.get(type).get(i);
 			}
 		}
@@ -115,7 +116,7 @@ public class UserProfile {
 
 	public boolean isTaking(Subject subject) {
 		for (Subject mySubject : subjects) {
-			if (mySubject.getId() == subject.getId()) {
+			if (mySubject == subject) {
 				return true;
 			}
 		}

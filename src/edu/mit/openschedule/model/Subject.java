@@ -9,8 +9,6 @@ import edu.mit.openschedule.model.Subjects.MeetingType;
 
 public class Subject {
 	
-	private Integer id = null;
-	
 	private final String number;
 	private final String name;
 	private final String description;
@@ -27,8 +25,6 @@ public class Subject {
 		meetings.put(MeetingType.LECTURE, new ArrayList<Meeting>());
 		meetings.put(MeetingType.RECITATION, new ArrayList<Meeting>());
 		meetings.put(MeetingType.LAB, new ArrayList<Meeting>());
-		
-		this.id = Subjects.asList().size();
 	}
 	
 	public Subject setRating(float rating) {
@@ -140,10 +136,6 @@ public class Subject {
 		public List<WeekdayTime> getWeekdayTimes() {
 			return meetingWeekdayTimes;
 		}
-	}
-
-	public Integer getId() {
-		return id;
 	}
 
 	public Meeting getMeeting(MeetingType type, Integer meetingId) {

@@ -140,7 +140,7 @@ public class CalendarFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(getActivity(), SubjectActivity.class);
-						intent.putExtra(SubjectActivity.SUBJECT_ID, meeting.getSubject().getId());
+						intent.putExtra(SubjectActivity.SUBJECT_NUMBER, meeting.getSubject().getNumber());
 						startActivity(intent);
 					}
 				});

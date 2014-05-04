@@ -32,7 +32,7 @@ public class SubjectFragment extends Fragment {
 				false);
 		
 		Bundle bundle = getArguments();
-		Subject subject = Subjects.asList().get((Integer) bundle.get("subject_id"));
+		Subject subject = Subjects.findByNumber((String)bundle.get(SubjectActivity.SUBJECT_NUMBER));
 		
 		((TextView) rootView.findViewById(R.id.subject_name_text)).setText(subject.getFullName());
 		
