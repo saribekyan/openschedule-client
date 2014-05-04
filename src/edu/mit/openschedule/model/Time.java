@@ -4,21 +4,22 @@ import java.util.Locale;
 
 public class Time {
 
-	public static final Time START = new Time("9:00");
-	public static final Time END = new Time("18:00");
+	public static final Time START = new Time("8:00", false);
+	public static final Time END = new Time("23:00", false);
 	
 	private int hour, minute;
 
-	public Time(String timeString) {
+	public Time(String timeString, boolean eve) {
 		String[] split = timeString.replace('.', ':').split(":");
 		hour = Integer.parseInt(split[0]);
-		if (hour < 9) {
-			hour += 12;
-		}
 		if (split.length > 1) {
 			minute = Integer.valueOf(split[1]);
 		} else {
 			minute = 0;
+		}
+		
+		if (eve || hour < 8) {
+			hour += 12;
 		}
 	}
 	
@@ -44,11 +45,15 @@ public class Time {
 
 	@Override
 	public String toString() {
-		String res = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
-		if (hour < 12) {
-			res += "am";
-		} else {
+		int hr = hour;
+		if (hour > 12) {
+			hr -= 12;
+		}
+		String res = String.format(Locale.getDefault(), "%02d:%02d", hr, minute);
+		if (hour >= 12) {
 			res += "pm";
+		} else {
+			res += "am";
 		}
 		return res;
 	}

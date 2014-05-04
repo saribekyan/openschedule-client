@@ -3,7 +3,6 @@ package edu.mit.openschedule.ui;
 import java.util.List;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;

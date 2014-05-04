@@ -27,8 +27,6 @@ import com.parse.ParseUser;
 
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.ParseServer;
-import edu.mit.openschedule.model.Subject;
-import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
 
 public class LoginActivity extends ActionBarActivity {
@@ -99,10 +97,10 @@ public class LoginActivity extends ActionBarActivity {
             for (String s : ss) {
                 Log.d("TAG", s);
             }
-            List<Subject> ls = ParseServer.getSubjects(ss);
-            //for (Subject s : ls) {
-            //    Subjects.addSubject(s);
-           // }
+//            List<Subject> ls = ParseServer.getSubjects(ss);
+//            for (Subject s : ls) {
+//                Subjects.addSubject(s);
+//            }
             UserProfile.getUserProfile();
             Intent intent = new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class);
             startActivity(intent);
