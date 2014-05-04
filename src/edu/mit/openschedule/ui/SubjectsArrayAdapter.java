@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.Subject;
@@ -36,14 +35,15 @@ public class SubjectsArrayAdapter extends ArrayAdapter<Subject> {
 		LayoutInflater inflater = (LayoutInflater) context
 		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		LinearLayout rowView = (LinearLayout)
-				inflater.inflate(R.layout.subject_name_layout, parent, false);
-		
-		TextView textView = (TextView) rowView.findViewById(R.id.subject_name_text);
-		Subject subject = this.getItem(position);
-		textView.setText(subject.getFullName());
-		
-		return rowView;
+		if (convertView == null) {
+		    convertView = inflater.inflate(R.layout.subject_name_layout, parent, false);
+		}
+
+	    TextView textView = (TextView) convertView.findViewById(R.id.subject_name_text);
+        Subject subject = this.getItem(position);
+        textView.setText(subject.getFullName());
+        
+        return convertView;
 	}
 	
 	private List<Subject> getSubjectNamesContaining(String substr) {

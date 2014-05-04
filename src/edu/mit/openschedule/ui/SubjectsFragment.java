@@ -16,8 +16,7 @@ public class SubjectsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_subjects, container,
-				false);
+		View rootView = inflater.inflate(R.layout.fragment_subjects, container, false);
 		
 		Button addClassButton = (Button) rootView.findViewById(R.id.subjects_add_subject_button);
 		addClassButton.setOnClickListener(new View.OnClickListener() {
@@ -28,7 +27,7 @@ public class SubjectsFragment extends Fragment {
 			}
 		});
 		
-		ListView listView = (ListView) rootView.findViewById(R.id.subjetcs_subject_list);
+		ListView listView = (ListView) rootView.findViewById(R.id.subjects_subject_list);
 		SubjectsArrayAdapter adapter = new SubjectsArrayAdapter(
 				getActivity(), UserProfile.getUserProfile().getSubjectList());
 		listView.setAdapter(adapter);
