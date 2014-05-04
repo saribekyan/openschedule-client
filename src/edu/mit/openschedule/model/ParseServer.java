@@ -11,7 +11,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import edu.mit.openschedule.model.Subject.Meeting;
 import edu.mit.openschedule.model.Subjects.MeetingType;
 
 public class ParseServer {
@@ -63,22 +62,31 @@ public class ParseServer {
             Subject subject = new Subject(parseObject.getString("number"),
                                           parseObject.getString("name"),
                                           parseObject.getString("description"));
-            JSONArray array = parseObject.getJSONArray("lectures");
-            for (int j = 0; j < array.length(); j++) {
-                try {
-                    String s = array.getString(j);
-                    // Replace many spaces with only one space.
-                    s = s.replaceAll("\\s+", " ");
-                    int x1 = s.indexOf(' ', 0);
-                    int x2 = s.lastIndexOf(' ');
-                    Meeting m = subject.new Meeting(MeetingType.LECTURE,
-                                                    s.substring(x2+1),
-                                                    s.substring(x1+1, x2));
-                    subject.addLecture(m);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            
+            for (MeetingType m : MeetingType.values()) {
+                JSONArray array;
+                if (m == MeetingType.LECTURE) {
+                    array = parseObject.getJSONArray("lectures");
+                } else if (m == MeetingType.RECITATION) {
+                    array = parseObject.getJSONArray("recitations");
+                } else {
+                    array = parseObject.getJSONArray("labs");
                 }
+                for (int j = 0; j < array.length(); j++) {
+                    try {
+                        String s = array.getString(j);
+                        // Replace many spaces with only one space.
+                        s = s.replaceAll("\\s+", " ");
+                        int x1 = s.indexOf(' ', 0);
+                        int x2 = s.lastIndexOf(' ');
+                        subject.addMeeting(m, s.substring(x2+1), s.substring(x1+1, x2));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                
             }
+
             result.add(subject);
         }
         return result;
