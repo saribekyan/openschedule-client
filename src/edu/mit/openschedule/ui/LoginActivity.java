@@ -98,7 +98,7 @@ public class LoginActivity extends ActionBarActivity {
             if (mProgress != null) {
                 mProgress.dismiss();
             }
-            UserProfile.getUserProfile().addSubjects(ParseServer.getSubjects(ParseServer.getSubjectNumbers()));
+            UserProfile.getUserProfile().setSubjects(ParseServer.getSubjects(ParseServer.getSubjectNumbers()));
             startActivity(new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class));
         }
         

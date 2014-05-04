@@ -40,8 +40,12 @@ public class UserProfile {
 		return singletonProfile;
 	}
 	
-	public void addSubjects(List<Subject> subjects) {
-	    this.subjects.addAll(subjects);
+	public List<Subject> getSubjects() {
+	    return new ArrayList<Subject>(subjects);
+	}
+	
+	public void setSubjects(List<Subject> subjects) {
+	    this.subjects = new ArrayList<Subject>(subjects);
 	    for(int i=0;i<subjects.size(); i++) {
 	        for (MeetingType m : MeetingType.values()) {
 	            int count = subjects.get(i).getMeetingCount(m);
