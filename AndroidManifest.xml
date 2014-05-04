@@ -48,6 +48,9 @@
             android:label="@string/title_activity_subject" >
 
         </activity>
+        
+        <uses-library android:name="android.test.runner" />
+        
     </application>
 
 </manifest>

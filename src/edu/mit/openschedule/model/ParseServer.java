@@ -38,33 +38,56 @@ public class ParseServer {
         return result;
     }
     
+    /**
+     * Get the list containing the information about each subject
+     * provided in subjectNumberList.
+     * @param subjectNumberList The list of subject numbers that the user is interested in
+     * @return the information about each subject in subjectNumberList,
+     * or the empty list if error occurred during subject retrieval from the server.
+     */
     public static List<Subject> getSubjects(List<String> subjectNumberList) {
-        List<Subject> result = new ArrayList<Subject>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
-        query.whereContainedIn("number", subjectNumberList);
+        List<ParseObject> parseObjectList = null;
         try {
-            List<ParseObject> parseObjectList = query.find();
-            for (ParseObject parseObject : parseObjectList) {
-                Subject subject = new Subject(parseObject.getString("number"), parseObject.getString("name"), parseObject.getString("description"));
-                JSONArray array = null;
-                try {
+            // Retrieve subjects written in subjectNumberList.
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
+            query.whereContainedIn("number", subjectNumberList);
+            parseObjectList = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Find failed, so we return empty list.
+            return new ArrayList<Subject>();
+        }
+        List<Subject> result = new ArrayList<Subject>();
+        for (ParseObject parseObject : parseObjectList) {
+            Subject subject = new Subject(parseObject.getString("number"),
+                                          parseObject.getString("name"),
+                                          parseObject.getString("description"));
+            
+            for (MeetingType m : MeetingType.values()) {
+                JSONArray array;
+                if (m == MeetingType.LECTURE) {
                     array = parseObject.getJSONArray("lectures");
-                    for (int j = 0; j < array.length(); j++) {
+                } else if (m == MeetingType.RECITATION) {
+                    array = parseObject.getJSONArray("recitations");
+                } else {
+                    array = parseObject.getJSONArray("labs");
+                }
+                for (int j = 0; j < array.length(); j++) {
+                    try {
                         String s = array.getString(j);
+                        // Replace many spaces with only one space.
                         s = s.replaceAll("\\s+", " ");
                         int x1 = s.indexOf(' ', 0);
                         int x2 = s.lastIndexOf(' ');
-                        try {
-                            subject.addMeeting(MeetingType.LECTURE, s.substring(x2+1), s.substring(x1+1, x2));
-                        } catch (Exception e) {
-                            continue;
-                        }
+                        subject.addMeeting(m, s.substring(x2+1), s.substring(x1+1, x2));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) { return null; }
-                result.add(subject);
+                }
+                
             }
-        } catch (ParseException e) {
-            return null;
+
+            result.add(subject);
         }
         return result;
     }
