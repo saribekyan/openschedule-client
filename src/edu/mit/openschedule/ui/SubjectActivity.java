@@ -5,8 +5,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import edu.mit.openschedule.R;
-import edu.mit.openschedule.model.Subject;
-import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
 
 public class SubjectActivity extends ActionBarActivity {
