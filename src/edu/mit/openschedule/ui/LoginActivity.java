@@ -84,7 +84,12 @@ public class LoginActivity extends ActionBarActivity {
             
             // By default, users don't have access to anything they create
             ParseACL.setDefaultACL(new ParseACL(), false);
-
+            
+            if (ParseUser.getCurrentUser() != null) {
+                // User has already logged in, therefore we don't need to sign in
+                loginSuccessful();
+            }
+            
             return rootView;
         }
         
@@ -92,18 +97,11 @@ public class LoginActivity extends ActionBarActivity {
             mUserName.setEnabled(true);
             mPassword.setEnabled(true);
             mLogin.setEnabled(true);
-            mProgress.dismiss();
-            List<String> ss = ParseServer.getSubjectNumbers();
-            for (String s : ss) {
-                Log.d("TAG", s);
+            if (mProgress != null) {
+                mProgress.dismiss();
             }
-//            List<Subject> ls = ParseServer.getSubjects(ss);
-//            for (Subject s : ls) {
-//                Subjects.addSubject(s);
-//            }
-            UserProfile.getUserProfile();
-            Intent intent = new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class);
-            startActivity(intent);
+            UserProfile.getUserProfile().addSubjects(ParseServer.getSubjects(ParseServer.getSubjectNumbers()));
+            startActivity(new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class));
         }
         
         private void loginUnsuccessful() {

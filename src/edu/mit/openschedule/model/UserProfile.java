@@ -14,7 +14,6 @@ import edu.mit.openschedule.model.Task.Status;
 public class UserProfile {
 	private static UserProfile singletonProfile = null;
 	
-	private String name;
 	private List<Subject> subjects;
 	
 	private Map< MeetingType, List<Integer> > meetingNumber =
@@ -28,81 +27,7 @@ public class UserProfile {
 		meetingNumber.put(MeetingType.LECTURE, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.RECITATION, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.LAB, new ArrayList<Integer>());
-		
-//		name = "Tsotne Tabidze";
-//		subjects = new ArrayList<Subject>();
-//		Subject s1 = Subjects.getSubject(0);
-//		Meeting l1 = s1.getLecture(0);
-//		s1.addLecture(l1)
-//			.setRating((float) 3.5);
-//		Subjects.addSubject(s1);
-		
-		
-//		subjects.add(s1);
-//		meetingNumber.get(MeetingType.LECTURE).add(0);
-//		meetingNumber.get(MeetingType.RECITATION).add(null);
-//		meetingNumber.get(MeetingType.LAB).add(null);
-		
-        subjects = new ArrayList<Subject>();
-		for(int i=0;i<Subjects.size(); i++) {
-            try {
-    	        Subject s1 = Subjects.getSubject(i);
-    	        s1.setRating((float) 3.5);
-//    	        Subjects.addSubject(s1);
-    	        
-    	        subjects.add(s1);
-    	        meetingNumber.get(MeetingType.LECTURE).add(0);
-    	        meetingNumber.get(MeetingType.RECITATION).add(null);
-    	        meetingNumber.get(MeetingType.LAB).add(null);
-            } catch (Exception e) {}
-		}
-		
-//		Subject s4 = new Subject("6.046", "Algo", "Also is cool");
-//		Meeting l4 = s4.new Meeting(MeetingType.LECTURE, "26-100")
-//						.add(new WeekdayTime('T', "9:30", "11:00"))
-//						.add(new WeekdayTime('R', "9:30", "11"));
-//		Meeting r4 = s4.new Meeting(MeetingType.RECITATION, "36-156")
-//						.add(new WeekdayTime('F', "3", "4"));
-//		s4.addLecture(l4)
-//			.addRecitation(r4);
-//		
-//		lectureFlag.add(true);
-//		subjects.add(s4);
-//		recitationNumber.add(0);
-//		labNumber.add(null);
 
-//		Subject s2 = new Subject("6.036", "ML", "ML is cool");
-//		Meeting l2 = s2.new Meeting(MeetingType.LECTURE, "10-250", "TR10.30-12")
-//						.add(new WeekdayTime('T', "10:30", "12:00"))
-//						.add(new WeekdayTime('R', "10:30", "12:00"));
-//		Meeting r2 = s2.new Meeting(MeetingType.RECITATION, "36-156", "F3")
-//						.add(new WeekdayTime('F', "3"));
-//		Meeting lab2 = s2.new Meeting(MeetingType.LAB, "32-082", "F5")
-//						.add(new WeekdayTime('F', "5"));
-//		s2.addLecture(l2)
-//			.addRecitation(r2)
-//			.addLab(lab2);
-//		Subjects.addSubject(s2);
-//		
-//		subjects.add(s2);
-//		meetingNumber.get(MeetingType.LECTURE).add(0);
-//		meetingNumber.get(MeetingType.RECITATION).add(0);
-//		meetingNumber.get(MeetingType.LAB).add(0);
-		
-//		Subject s3 = new Subject("6.036", "ML", "ML is cool");
-//		Meeting l3 = s3.new Meeting(MeetingType.LECTURE, "10-250")
-//						.add(new WeekdayTime('T', "10:30", "12:00"))
-//						.add(new WeekdayTime('R', "10:30", "12:00"));
-//		Meeting r3 = s3.new Meeting(MeetingType.RECITATION, "36-156")
-//						.add(new WeekdayTime('F', "3"));
-//		s3.addLecture(l3)
-//			.addRecitation(r3);
-//		
-//		lectureFlag.add(true);
-//		subjects.add(s3);
-//		recitationNumber.add(0);
-//		labNumber.add(null);
-		
 		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online"));
 		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30));
 		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30).submit());
@@ -113,6 +38,22 @@ public class UserProfile {
 			singletonProfile = new UserProfile();
 		}
 		return singletonProfile;
+	}
+	
+	public void addSubjects(List<Subject> subjects) {
+	    this.subjects = new ArrayList<Subject>(subjects);
+	    for(int i=0;i<subjects.size(); i++) {
+	        for (MeetingType m : MeetingType.values()) {
+	            int count = subjects.get(i).getMeetingCount(m);
+	            Integer value = null;
+	            if (count == 1) {
+	                value = 0;
+	            } else if (count > 1) {
+	                value = -1;
+	            }
+                meetingNumber.get(m).add(value);
+	        }
+	    }
 	}
 	
 	public List<Meeting> meetingsAt(WeekdayTime weekdayTime) {
