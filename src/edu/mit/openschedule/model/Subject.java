@@ -163,6 +163,14 @@ public class Subject {
 	public int getMeetingCount(MeetingType meetingType) {
 		return meetings.get(meetingType).size();
 	}
+	
+	/**
+	 * @param type Type of the meetings to return
+	 * @return All the meetings of the given type
+	 */
+	public List<Meeting> getAllMeetings(MeetingType type) {
+	    return new ArrayList<Meeting>(meetings.get(type));
+	}
 
 	public float getRating() {
 		return rating;

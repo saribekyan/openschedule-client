@@ -39,35 +39,47 @@ public class ParseServer {
         return result;
     }
     
+    /**
+     * Get the list containing the information about each subject
+     * provided in subjectNumberList.
+     * @param subjectNumberList The list of subject numbers that the user is interested in
+     * @return the information about each subject in subjectNumberList,
+     * or the empty list if error occurred during subject retrieval from the server.
+     */
     public static List<Subject> getSubjects(List<String> subjectNumberList) {
-        List<Subject> result = new ArrayList<Subject>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
-        query.whereContainedIn("number", subjectNumberList);
+        List<ParseObject> parseObjectList = null;
         try {
-            List<ParseObject> parseObjectList = query.find();
-            for (ParseObject parseObject : parseObjectList) {
-                Subject subject = new Subject(parseObject.getString("number"), parseObject.getString("name"), parseObject.getString("description"));
-                JSONArray array = null;
-                try {
-                    array = parseObject.getJSONArray("lectures");
-                    for (int j = 0; j < array.length(); j++) {
-                        String s = array.getString(j);
-                        s = s.replaceAll("\\s+", " ");
-                        int x1 = s.indexOf(' ', 0);
-                        int x2 = s.lastIndexOf(' ');
-                        Meeting m;
-                        try {
-                            m = subject.new Meeting(MeetingType.LECTURE, s.substring(x2+1), s.substring(x1+1, x2));
-                        } catch (Exception e) {
-                            continue;
-                        }
-                        subject.addLecture(m);
-                    }
-                } catch (JSONException e) { return null; }
-                result.add(subject);
-            }
+            // Retrieve subjects written in subjectNumberList.
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
+            query.whereContainedIn("number", subjectNumberList);
+            parseObjectList = query.find();
         } catch (ParseException e) {
-            return null;
+            e.printStackTrace();
+            // Find failed, so we return empty list.
+            return new ArrayList<Subject>();
+        }
+        List<Subject> result = new ArrayList<Subject>();
+        for (ParseObject parseObject : parseObjectList) {
+            Subject subject = new Subject(parseObject.getString("number"),
+                                          parseObject.getString("name"),
+                                          parseObject.getString("description"));
+            JSONArray array = parseObject.getJSONArray("lectures");
+            for (int j = 0; j < array.length(); j++) {
+                try {
+                    String s = array.getString(j);
+                    // Replace many spaces with only one space.
+                    s = s.replaceAll("\\s+", " ");
+                    int x1 = s.indexOf(' ', 0);
+                    int x2 = s.lastIndexOf(' ');
+                    Meeting m = subject.new Meeting(MeetingType.LECTURE,
+                                                    s.substring(x2+1),
+                                                    s.substring(x1+1, x2));
+                    subject.addLecture(m);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            result.add(subject);
         }
         return result;
     }
