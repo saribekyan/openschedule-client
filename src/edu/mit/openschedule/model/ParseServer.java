@@ -1,8 +1,6 @@
 package edu.mit.openschedule.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -13,7 +11,6 @@ import android.util.Log;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQuery.CachePolicy;
 import com.parse.ParseUser;
 
 import edu.mit.openschedule.model.Subjects.MeetingType;

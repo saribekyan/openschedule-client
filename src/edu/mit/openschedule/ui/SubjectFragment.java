@@ -38,7 +38,7 @@ public class SubjectFragment extends Fragment {
 		
 		ExpandableListView expListView = (ExpandableListView)
 				rootView.findViewById(R.id.subject_exp_list_view);
-		expListView.setAdapter(new SubjectAdapter(getActivity(), subject));
+		expListView.setAdapter(new SubjectAdapter(getActivity(), subject, expListView));
 		
 		((RatingBar) rootView.findViewById(R.id.subject_rating_ratingbar)).setRating(subject.getRating());
 		
@@ -56,10 +56,12 @@ public class SubjectFragment extends Fragment {
 		
 		private final Context context;
 		private final Subject subject;
+		private final ExpandableListView expListView;
 		
-		public SubjectAdapter(Context context, Subject subject) {
+		public SubjectAdapter(Context context, Subject subject, ExpandableListView expListView) {
 			this.context = context;
 			this.subject = subject;
+			this.expListView = expListView;
 		}
 
 		@Override
@@ -73,7 +75,7 @@ public class SubjectFragment extends Fragment {
 		}
 
 		@Override
-		public View getChildView(int groupPosition, int childPosition,
+		public View getChildView(final int groupPosition, final int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
 			
 			if (groupPosition == 0) {// Description
@@ -88,8 +90,8 @@ public class SubjectFragment extends Fragment {
 				return rowView;
 			}
 			if (groupPosition <= 4) { // Lecture, Recitation, Lab
-				MeetingType type = MeetingType.values()[groupPosition - 1];
-				Meeting meeting = subject.getMeeting(type, childPosition);
+				final MeetingType type = MeetingType.values()[groupPosition - 1];
+				final Meeting meeting = subject.getMeeting(type, childPosition);
 				
 				LayoutInflater inflater = (LayoutInflater) context
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -99,6 +101,16 @@ public class SubjectFragment extends Fragment {
 				
 				TextView timeLocText = (TextView) childView.findViewById(R.id.subject_meeting_child_time_loc_text);
 				timeLocText.setText(meeting.getTimeString() + "(" + meeting.getLocationString() + ")");
+				
+				timeLocText.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						UserProfile.getUserProfile().setMeeting(subject, type, childPosition);
+						expListView.collapseGroup(groupPosition);
+					}
+				});
+				
 				return childView;
 			}
 			// Rating - none
