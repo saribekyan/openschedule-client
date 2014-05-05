@@ -45,5 +45,7 @@
     <string name="select_personal_deadline">Select Personal Deadline</string>
     <string name="enter_submit_location">Enter Submit Location</string>
     <string name="add_task_done">Done</string>
+    
+    <string name="menu_logout">Logout</string>
 
 </resources>

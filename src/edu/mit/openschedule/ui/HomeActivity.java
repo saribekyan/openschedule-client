@@ -2,6 +2,9 @@ package edu.mit.openschedule.ui;
 
 import java.util.Locale;
 
+import com.parse.ParseUser;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +14,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.ParseServer;
+import edu.mit.openschedule.model.Subjects;
+import edu.mit.openschedule.model.UserProfile;
+import edu.mit.openschedule.ui.LoginActivity.PlaceholderFragment;
 
 public class HomeActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
@@ -34,14 +42,18 @@ public class HomeActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 		setContentView(R.layout.activity_home);
-
+		getSupportActionBar().setTitle(R.string.app_name);
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        Subjects.addSubjects(ParseServer.loadSubjectList(this));
+        UserProfile.getUserProfile().setSubjects(ParseServer.getUserSubjectNumbers());
+
+		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
@@ -76,17 +88,19 @@ public class HomeActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    // Don't inflate the menu
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.home, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.menu_logout) {
+		    ParseUser.logOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

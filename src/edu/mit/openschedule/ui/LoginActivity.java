@@ -25,8 +25,6 @@ import com.parse.ParseUser;
 
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.ParseServer;
-import edu.mit.openschedule.model.Subjects;
-import edu.mit.openschedule.model.UserProfile;
 
 public class LoginActivity extends ActionBarActivity {
 
@@ -85,6 +83,7 @@ public class LoginActivity extends ActionBarActivity {
             ParseACL.setDefaultACL(new ParseACL(), false);
             
             if (ParseUser.getCurrentUser() != null) {
+                disableViews();
                 // User has already logged in, therefore we don't need to sign in
                 loginSuccessful();
             }
@@ -99,9 +98,9 @@ public class LoginActivity extends ActionBarActivity {
             if (mProgress != null) {
                 mProgress.dismiss();
             }
-            Subjects.addSubjects(ParseServer.loadSubjectList(getActivity()));
-            UserProfile.getUserProfile().setSubjects(ParseServer.getUserSubjectNumbers());
-            startActivity(new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class));
+            Intent intent = new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         }
         
         private void loginUnsuccessful() {
@@ -114,6 +113,17 @@ public class LoginActivity extends ActionBarActivity {
             Toast.makeText(getActivity(), R.string.login_toast_unable, Toast.LENGTH_SHORT).show();
         }
 
+        private void disableViews() {
+            mUserName.setEnabled(false);
+            mPassword.setEnabled(false);
+            mLogin.setEnabled(false);
+            mProgress = new ProgressDialog(PlaceholderFragment.this.getActivity());
+            mProgress.setTitle(getString(R.string.login_progress_title));
+            mProgress.setMessage(getString(R.string.login_progress_logging_in));
+            mProgress.show();
+            mProgress.setCancelable(false);
+        }
+        
         private class LogInUser extends LogInCallback {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -176,14 +186,7 @@ public class LoginActivity extends ActionBarActivity {
         private class LoginButtonOnClickListener implements OnClickListener {
             @Override
             public void onClick(View v) {
-                mUserName.setEnabled(false);
-                mPassword.setEnabled(false);
-                mLogin.setEnabled(false);
-                mProgress = new ProgressDialog(PlaceholderFragment.this.getActivity());
-                mProgress.setTitle(getString(R.string.login_progress_title));
-                mProgress.setMessage(getString(R.string.login_progress_logging_in));
-                mProgress.show();
-                mProgress.setCancelable(false);
+                disableViews();
                 ParseUser.logInInBackground(mUserName.getText().toString().toLowerCase(Locale.US),
                         mPassword.getText().toString(),
                         new LogInUser());
