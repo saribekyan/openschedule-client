@@ -5,8 +5,6 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -111,12 +109,8 @@ public class AddTaskFragment extends Fragment {
 					Toast.makeText(getActivity(), "Task already exists", Toast.LENGTH_LONG).show();
 					return;
 				}
-				Fragment fragment = new TasksFragment();
-
-				FragmentManager fm = getActivity().getSupportFragmentManager();
-				FragmentTransaction transaction = fm.beginTransaction();
-				transaction.replace(R.id.container, fragment);
-				transaction.commit();
+				
+				getActivity().finish();
 			}
 		});
 		
