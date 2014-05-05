@@ -91,8 +91,16 @@ public class CalendarFragment extends Fragment {
 		
 		int colorIndex = 0;
 		private final Integer[] colors = {
-			Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN,
-			Color.CYAN, Color.MAGENTA
+            0xff33B5E5,
+            0xffAA66CC,
+            0xff99CC00,
+            0xffFFBB33,
+            0xffFF4444,
+            0xff0099CC,
+            0xff9933CC,
+            0xff669900,
+            0xffFF8800,
+            0xffCC0000,
 		};
 		private final Map<Meeting, Integer> meetingNamePosition =
 				new HashMap<Meeting, Integer>();
