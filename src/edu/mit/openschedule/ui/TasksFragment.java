@@ -3,6 +3,7 @@ package edu.mit.openschedule.ui;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,16 @@ public class TasksFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
+		
+		Button addTaskButton = (Button) rootView.findViewById(R.id.tasks_add_task_button);
+		addTaskButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), AddTaskActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 		final ExpandableListView listView =
 				(ExpandableListView) rootView.findViewById(R.id.tasks_exp_list);

@@ -36,5 +36,14 @@
     <string name="subject_rating">Rating:</string>
     <string name="calendar_previous_day">Go to the previous day</string>
     <string name="calendar_next_day">Go to the next day</string>
+    <string name="tasks_add_task_button">Add Task</string>
+    <string name="title_activity_add_task">AddTaskActivity</string>
+    <string name="select_subject">Select Class</string>
+    <string name="select_assignment">Select Assignment</string>
+    <string name="select_assignment_number">Select Number</string>
+    <string name="select_actual_deadline">Select Class Deadline</string>
+    <string name="select_personal_deadline">Select Personal Deadline</string>
+    <string name="enter_submit_location">Enter Submit Location</string>
+    <string name="add_task_done">Done</string>
 
 </resources>

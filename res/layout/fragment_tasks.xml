@@ -3,7 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+    
+    <Button
+        android:id="@+id/tasks_add_task_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tasks_add_task_button" />
+    
     <ExpandableListView
         android:id="@+id/tasks_exp_list"
         android:layout_width="match_parent"

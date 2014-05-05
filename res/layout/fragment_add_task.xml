@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Spinner
+        android:id="@+id/add_task_select_subject_dropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/select_subject"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+        
+	    <Spinner
+	        android:id="@+id/add_task_select_assignment_dropdown"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1.0"
+	        android:prompt="@string/select_assignment" />
+	
+	    <Spinner
+	        android:id="@+id/add_task_select_number_spinner"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.5"
+	        android:prompt="@string/select_assignment_number" />
+	</LinearLayout>
+	
+    <Button
+        android:id="@+id/add_task_select_actual_deadline_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_actual_deadline" />
+    
+    <Button
+        android:id="@+id/add_task_select_personal_deadline_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_personal_deadline" />
+    
+    <EditText
+        android:id="@+id/add_task_submit_location_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_submit_location"/>
+    
+    <Button 
+        android:id="@+id/add_task_done_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_task_done"/>
+<!-- 
+    <LinearLayout
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+        
+	    <DatePicker
+	        android:id="@+id/add_task_actual_deadline_date_picker"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:calendarViewShown="false" />
+	    
+	    <TimePicker
+	        android:id="@+id/add_task_actual_deadline_time_picker"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" />
+	</LinearLayout> -->
+
+</LinearLayout>

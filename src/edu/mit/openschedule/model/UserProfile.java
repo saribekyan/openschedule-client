@@ -14,7 +14,7 @@ import edu.mit.openschedule.model.Task.Status;
 public class UserProfile {
 	private static UserProfile singletonProfile = null;
 	
-	private List<Subject> subjects;
+	private List<Subject> subjects = new ArrayList<Subject>();
 	
 	private Map< MeetingType, List<Integer> > meetingNumber =
 			new HashMap<MeetingType, List<Integer> >();
@@ -122,6 +122,14 @@ public class UserProfile {
 		}
 		return false;
 	}
+	
+	public void setMeeting(Subject subject, MeetingType type, int meetingIndex) {
+		for (int i = 0; i < subjects.size(); ++i) {
+			if (subjects.get(i) == subject) {
+				meetingNumber.get(type).set(i, meetingIndex);
+			}
+		}
+	}
 
 	public Task getTask(int taskId) {
 		for (Task task : tasks) {
@@ -130,5 +138,13 @@ public class UserProfile {
 			}
 		}
 		throw new RuntimeException("no such id");
+	}
+
+	public List<String> getSubjectsString() {
+		List<String> subjectsString = new ArrayList<String>();
+		for (Subject subject : subjects) {
+			subjectsString.add(subject.getNumber() + " " + subject.getName());
+		}
+		return subjectsString;
 	}
 }
