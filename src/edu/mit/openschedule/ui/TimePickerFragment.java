@@ -11,7 +11,7 @@ import android.text.format.DateFormat;
 import android.widget.TimePicker;
 import edu.mit.openschedule.model.UserProfile;
 
-public class AssignmentLengthPickerFragment extends DialogFragment implements
+public class TimePickerFragment extends DialogFragment implements
 		OnTimeSetListener {
 
 	@Override
@@ -29,6 +29,12 @@ public class AssignmentLengthPickerFragment extends DialogFragment implements
 	@Override
 	public void onTimeSet(TimePicker view, int hour, int minute) {
 		int taskId = getArguments().getInt("task_id");
-		UserProfile.getUserProfile().getTask(taskId).finish(hour, minute);
+		if (taskId == -1) { // new task
+			AddTaskFragment.hour = hour;
+			AddTaskFragment.minute = minute;
+			AddTaskFragment.selectTimeButton.setText(hour + ":" + minute);
+		} else {
+			UserProfile.getUserProfile().getTask(taskId).finish(hour, minute);
+		}
 	}
 }
