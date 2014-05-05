@@ -35,7 +35,7 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
-        
+        ParseServer.loadSubjectListInBackground(this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -99,7 +99,7 @@ public class LoginActivity extends ActionBarActivity {
             if (mProgress != null) {
                 mProgress.dismiss();
             }
-            Subjects.addSubjects(ParseServer.getSubjects(null));
+            Subjects.addSubjects(ParseServer.loadSubjectList(getActivity()));
             UserProfile.getUserProfile().setSubjects(ParseServer.getUserSubjectNumbers());
             startActivity(new Intent(PlaceholderFragment.this.getActivity(), HomeActivity.class));
         }

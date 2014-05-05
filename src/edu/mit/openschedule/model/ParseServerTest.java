@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import android.test.InstrumentationTestCase;
 import edu.mit.openschedule.model.Subject.Meeting;
 import edu.mit.openschedule.model.Subjects.MeetingType;
 
-public class ParseServerTest extends TestCase {
+public class ParseServerTest extends InstrumentationTestCase {
 
     public void test_getSubjects() {
-        List<Subject> subjects = ParseServer.getSubjects(new ArrayList<String>(Arrays.asList("6.046")));
+        List<Subject> all_subjects = ParseServer.loadSubjectList(getInstrumentation().getContext());
+        List<Subject> subjects = new ArrayList<Subject>();
+        for (Subject subject : all_subjects) {
+            if (subject.getNumber().equals("6.046")) {
+                subjects.add(subject);
+            }
+        }
         assertEquals(1, subjects.size());
         Subject subject = subjects.get(0);
         assertEquals("6.046 Design and Analysis of Algorithms", subject.getFullName().toString());
