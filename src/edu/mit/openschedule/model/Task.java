@@ -6,10 +6,14 @@ import java.util.Locale;
 
 public class Task implements Comparable<Task> {
 	
-	private final int id;
-	private static int taskIds = 0;
+	public static final String[] TASKS = {"Problem Set", "Project", "Paper", "Lab", "Hands on"};
 	
-	private String name;
+	private static int taskIds = 0;
+	private final int taskId;
+	
+	private Subject subject;
+	private int taskType;
+	private int taskNumber;
 	
 	private Calendar personalDeadline;
 	private Calendar classDeadline;
@@ -23,22 +27,20 @@ public class Task implements Comparable<Task> {
 	
 	private Status status;
 	
-	public Task(String name,
+	public Task(Subject subject, int taskType, int taskId,
 			Calendar classDeadline) {
-		this.name = name;
+		this.subject = subject;
+		this.taskType = taskType;
+		this.taskNumber = taskId;
 		this.classDeadline = classDeadline;
 		
+		this.taskId = taskIds++;
 		personalDeadline = Calendar.getInstance();
 		personalDeadline.setTime(classDeadline.getTime());
 		othersSpent = null;
 		userSpent = null;
 		submitLocation = "N/A";
 		status = Status.UNFINISHED;
-		this.id = taskIds++;
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
 	public Task setPersonalDeadline(Calendar personalDeadline) {
@@ -74,7 +76,7 @@ public class Task implements Comparable<Task> {
 	}
 	
 	public String getName() {
-		return name;
+		return subject.getNumber() + " " + TASKS[taskType] + " " + taskNumber;
 	}
 	
 	public Status getStatus() {
@@ -112,6 +114,18 @@ public class Task implements Comparable<Task> {
 		return submitLocation;
 	}
 	
+	public Subject getSubject() {
+		return subject;
+	}
+	
+	public int getTaskType() {
+		return taskType;
+	}
+	
+	public int getTaskNumber() {
+		return taskNumber;
+	}
+	
 	@Override
 	public int compareTo(Task another) {
 		if (personalDeadline.before(another.personalDeadline)) {
@@ -121,5 +135,9 @@ public class Task implements Comparable<Task> {
 			return 1;
 		}
 		return 0;
+	}
+
+	public int getId() {
+		return taskId;
 	}
 }

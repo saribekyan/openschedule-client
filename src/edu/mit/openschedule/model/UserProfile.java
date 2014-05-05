@@ -28,9 +28,9 @@ public class UserProfile {
 		meetingNumber.put(MeetingType.RECITATION, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.LAB, new ArrayList<Integer>());
 
-		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online"));
-		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30));
-		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30).submit());
+//		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online"));
+//		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30));
+//		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30).submit());
 	}
 	
 	public static UserProfile getUserProfile() {
@@ -146,5 +146,25 @@ public class UserProfile {
 			subjectsString.add(subject.getNumber() + " " + subject.getName());
 		}
 		return subjectsString;
+	}
+
+	public boolean addTask(int selectedSubjectId, int selectedTaskType,
+			int selectedNumber, int year, int month, int day, int hour,
+			int minute, String location) {
+		Subject s = subjects.get(selectedSubjectId);
+		for (Task task : tasks) {
+			if (task.getSubject() == s && task.getTaskType() == selectedTaskType && task.getTaskNumber() == selectedNumber) {
+				return false;
+			}
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DAY_OF_MONTH, day);
+		calendar.set(Calendar.HOUR, hour);
+		calendar.set(Calendar.MINUTE, minute);
+		tasks.add(new Task(s, selectedTaskType, selectedNumber, calendar).setSubmitLocation(location));
+		return true;
 	}
 }

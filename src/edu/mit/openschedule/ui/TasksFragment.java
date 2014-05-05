@@ -143,14 +143,13 @@ public class TasksFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
-						DialogFragment timePickerFragment = new AssignmentLengthPickerFragment();
+						DialogFragment timePickerFragment = new TimePickerFragment();
 						
 						Bundle bundle = new Bundle();
 						bundle.putInt("task_id", task.getId());
 					    timePickerFragment.setArguments(bundle);
 					    
 					    timePickerFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
-//					    ((BaseExpandableListAdapter)TasksAdapter.this).notifyDataSetInvalidated();
 					}
 				});
 			} else {
