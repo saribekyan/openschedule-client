@@ -1,25 +1,31 @@
 package edu.mit.openschedule.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQuery.CachePolicy;
 import com.parse.ParseUser;
 
+import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.Subjects.MeetingType;
 
 public class ParseServer {
 
+    private static List<Subject> subjects = null;
+    
     /**
      * @return the list containing subject numbers that the student is taking.
      * For example: ["6.004", "6.005", "18.02", "21F.222"].
@@ -43,81 +49,79 @@ public class ParseServer {
         return result;
     }
     
+    
     /**
-     * Get the list containing the information about each subject
-     * provided in subjectNumberList.
-     * @param subjectNumberList The list of subject numbers that the user is interested in. If null, will return all classes.
-     * @return the information about each subject in subjectNumberList,
-     * or the empty list if error occurred during subject retrieval from the server.
+     * Loads whole subject list from the resources to the memory, in background
+     * @param context Application context
      */
-    public static List<Subject> getSubjects(List<String> subjectNumberList) {
-    	List<Subject> result = new ArrayList<Subject>();
-    	int skip = 0, bucket = 1000;
-    	while (true) {
-	        List<ParseObject> parseObjectList = null;
-	        try {
-	            // Retrieve subjects written in subjectNumberList.
-	            ParseQuery<ParseObject> query = ParseQuery.getQuery("Subjects");
-//                query.setCachePolicy(CachePolicy.NETWORK_ELSE_CACHE);
-//	            query.fromLocalDatastore();
-	            if (subjectNumberList != null) {
-	                query.whereContainedIn("number", subjectNumberList);
-	                query.setMaxCacheAge(12*60*60*1000L);
-	            } else {
-	                query.whereGreaterThanOrEqualTo("classId", skip);
-	                query.whereLessThan("classId", skip+bucket);
-//	            	query.setSkip(skip);
-	            	query.setLimit(bucket);
-	            }
-	            parseObjectList = query.find();
-                ParseObject.pinAllInBackground(parseObjectList);
-	        } catch (ParseException e) {
-	            e.printStackTrace();
-	            // Find failed, so we return empty list.
-	            return result;
-	        }
-	        
-	        for (ParseObject parseObject : parseObjectList) {
-	            Subject subject = new Subject(parseObject.getString("number"),
-	                                          parseObject.getString("name"),
-	                                          parseObject.getString("description"));
-	
-	            for (MeetingType m : MeetingType.values()) {
-	                JSONArray array;
-	                if (m == MeetingType.LECTURE) {
-	                    array = parseObject.getJSONArray("lectures");
-	                } else if (m == MeetingType.RECITATION) {
-	                    array = parseObject.getJSONArray("recitations");
-	                } else {
-	                    array = parseObject.getJSONArray("labs");
-	                }
-	                for (int j = 0; j < array.length(); j++) {
-	                    try {
-	                        String s = array.getString(j);
-	                        // Replace many spaces with only one space.
-	                        s = s.replaceAll("\\s+", " ");
-	                        int x1 = s.indexOf(' ', 0);
-	                        int x2 = s.lastIndexOf(' ');
-	                        subject.addMeeting(m, s.substring(x2+1), s.substring(x1+1, x2));
-	                    } catch (Exception e) {
-	                        e.printStackTrace();
-	                    }
-	                }
-	                
-	            }
-	            result.add(subject);
-	        }
-	        Log.d("TAG", ""+skip+" "+parseObjectList.size());
-//	        if (parseObjectList.size() < bucket) {
-//	        	break;
-//	        }
-            skip += bucket;
-            if (parseObjectList.size() < bucket) {
-                break;
+    public static void loadSubjectListInBackground(final Context context) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadSubjectList(context);
             }
-    	}
-    	
-    	return result;
+        }).start();
+    }
+    
+    /**
+     * Loads whole subject list from the resources to the memory, if it's not loaded already.
+     * @param context Application context
+     * @return The list of subjects in the semester
+     */
+    public static synchronized List<Subject> loadSubjectList(Context context) {
+        if (subjects != null) {
+            return subjects;
+        }
+        subjects = new ArrayList<Subject>();
+        try {
+            // Read the subjects listing from the resources file and parse it into JSONObject
+            JSONObject subjects_json = new JSONObject(new Scanner(context.getResources().openRawResource(R.raw.subjects_sp2014)).useDelimiter("\\A").next());
+            for (Iterator it = subjects_json.keys(); it.hasNext(); ) {
+                JSONObject subject_json = subjects_json.getJSONObject((String)it.next());
+                subjects.add(_getSubject(subject_json.getString("number"),
+                                        subject_json.getString("name"),
+                                        subject_json.getString("description"),
+                                        subject_json.getJSONArray("lectures"),
+                                        subject_json.getJSONArray("recitations"),
+                                        subject_json.getJSONArray("labs")));
+            }
+        } catch (NotFoundException e) {
+            Log.e("TAG", "Subject List couldn't be found", e);
+        } catch (JSONException e) {
+            Log.e("TAG", "Subject List couldn't be parsed", e);
+        }
+        subjects = Collections.unmodifiableList(subjects);
+        return subjects;
+    }
+    
+    /** Returns Subject class initialized with the given parameters. */
+    private static Subject _getSubject(String number, String name, String description, JSONArray lectures, JSONArray recitations, JSONArray labs) {
+        Subject subject = new Subject(number, name, description);
+        for (MeetingType m : MeetingType.values()) {
+            JSONArray array;
+            if (m == MeetingType.LECTURE) {
+                array = lectures;
+            } else if (m == MeetingType.RECITATION) {
+                array = recitations;
+            } else {
+                array = labs;
+            }
+            for (int j = 0; j < array.length(); j++) {
+                try {
+                    String s = array.getString(j);
+                    // Replace many spaces with only one space.
+                    s = s.replaceAll("\\s+", " ");
+                    int x1 = s.indexOf(' ', 0);
+                    int x2 = s.lastIndexOf(' ');
+                    subject.addMeeting(m, s.substring(x2 + 1),
+                            s.substring(x1 + 1, x2));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return subject;
     }
     
 //    private static String getSemester() {
