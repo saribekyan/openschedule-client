@@ -2,8 +2,6 @@ package edu.mit.openschedule.ui;
 
 import java.util.Locale;
 
-import com.parse.ParseUser;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,11 +14,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.parse.ParseUser;
+
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.ParseServer;
 import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
-import edu.mit.openschedule.ui.LoginActivity.PlaceholderFragment;
 
 public class HomeActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
@@ -130,19 +130,24 @@ public class HomeActivity extends ActionBarActivity implements
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+		Fragment[] fragments = new Fragment[3]; 
+		
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
 		@Override
 		public Fragment getItem(int position) {
+			if (fragments[position] != null) {
+				return fragments[position];
+			}
 			switch (position) {
 			case 0:
-				return new CalendarFragment();
+				return fragments[position] = new CalendarFragment();
 			case 1:
-				return new TasksFragment();
+				return fragments[position] = new TasksFragment();
 			case 2:
-				return new SubjectsFragment();
+				return fragments[position] = new SubjectsFragment();
 			}
 			throw new IllegalArgumentException(String.format("position = %d", position));
 		}
@@ -170,35 +175,6 @@ public class HomeActivity extends ActionBarActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final ActionBar actionBar = getSupportActionBar();
-		actionBar.removeAllTabs();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
-
-		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-
-		// When swiping between different sections, select the corresponding
-		// tab. We can also use ActionBar.Tab#select() to do this if we have
-		// a reference to the Tab.
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-					@Override
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
-				});
-		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-			// Create a tab with text corresponding to the page title defined by
-			// the adapter. Also specify this Activity object, which implements
-			// the TabListener interface, as the callback (listener) for when
-			// this tab is selected.
-			actionBar.addTab(actionBar.newTab()
-					.setText(mSectionsPagerAdapter.getPageTitle(i))
-					.setTabListener(this));
-		}
-		actionBar.setSelectedNavigationItem(1);
+		((TasksFragment)mSectionsPagerAdapter.getItem(1)).refresh();
 	}
 }

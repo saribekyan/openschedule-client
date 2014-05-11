@@ -22,6 +22,8 @@ import edu.mit.openschedule.model.UserProfile;
 
 public class TasksFragment extends Fragment {
 	
+	private TasksAdapter mTasksAdapter;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -40,7 +42,8 @@ public class TasksFragment extends Fragment {
 		final ExpandableListView listView =
 				(ExpandableListView) rootView.findViewById(R.id.tasks_exp_list);
 		
-		listView.setAdapter(new TasksAdapter(getActivity()));
+		mTasksAdapter = new TasksAdapter(getActivity());
+		listView.setAdapter(mTasksAdapter);
 		
 		return rootView;
 	}
@@ -207,6 +210,12 @@ public class TasksFragment extends Fragment {
 		@Override
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			return false;
+		}
+	}
+	
+	public void refresh() {
+		if (mTasksAdapter != null) {
+			mTasksAdapter.notifyDataSetChanged();
 		}
 	}
 }

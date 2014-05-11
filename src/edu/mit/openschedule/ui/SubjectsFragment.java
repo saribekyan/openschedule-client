@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.Subject;
 import edu.mit.openschedule.model.UserProfile;
 
 public class SubjectsFragment extends Fragment {
@@ -28,9 +30,20 @@ public class SubjectsFragment extends Fragment {
 		});
 		
 		ListView listView = (ListView) rootView.findViewById(R.id.subjects_subject_list);
-		SubjectsArrayAdapter adapter = new SubjectsArrayAdapter(
+		final SubjectsArrayAdapter adapter = new SubjectsArrayAdapter(
 				getActivity(), UserProfile.getUserProfile().getSubjectList());
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				Subject subject = adapter.getItem(position);
+				Intent intent = new Intent(getActivity(), SubjectActivity.class);
+				intent.putExtra(SubjectActivity.SUBJECT_NUMBER, subject.getNumber());
+				startActivity(intent);
+			}
+		});
 		
 		return rootView;
 	}

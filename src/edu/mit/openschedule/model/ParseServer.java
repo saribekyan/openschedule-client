@@ -75,7 +75,8 @@ public class ParseServer {
         subjects = new ArrayList<Subject>();
         try {
             // Read the subjects listing from the resources file and parse it into JSONObject
-            JSONObject subjects_json = new JSONObject(new Scanner(context.getResources().openRawResource(R.raw.subjects_sp2014)).useDelimiter("\\A").next());
+            @SuppressWarnings("resource")
+			JSONObject subjects_json = new JSONObject(new Scanner(context.getResources().openRawResource(R.raw.subjects_sp2014)).useDelimiter("\\A").next());
             for (@SuppressWarnings("rawtypes") Iterator it = subjects_json.keys(); it.hasNext(); ) {
                 JSONObject subject_json = subjects_json.getJSONObject((String)it.next());
                 subjects.add(_getSubject(subject_json.getString("number"),
