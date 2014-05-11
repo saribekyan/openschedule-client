@@ -11,7 +11,7 @@ import edu.mit.openschedule.model.Subjects.MeetingType;
 public class ParseServerTest extends InstrumentationTestCase {
 
     public void test_getSubjects() {
-        List<Subject> all_subjects = ParseServer.loadSubjectList(getInstrumentation().getContext());
+        List<Subject> all_subjects = ParseServer.loadSubjectList();
         List<Subject> subjects = new ArrayList<Subject>();
         for (Subject subject : all_subjects) {
             if (subject.getNumber().equals("6.046")) {

@@ -106,7 +106,7 @@ public class SubjectFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
-						UserProfile.getUserProfile().setMeeting(subject, type, childPosition);
+						UserProfile.getUserProfile().setMeeting(subject.getNumber(), type, childPosition);
 						expListView.collapseGroup(groupPosition);
 					}
 				});

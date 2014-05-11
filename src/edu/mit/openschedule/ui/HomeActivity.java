@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.parse.ParseUser;
 
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.LocalUserProfile;
 import edu.mit.openschedule.model.ParseServer;
 import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
@@ -50,9 +51,9 @@ public class HomeActivity extends ActionBarActivity implements
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        Subjects.addSubjects(ParseServer.loadSubjectList(this));
+        Subjects.addSubjects(ParseServer.loadSubjectList());
         UserProfile.getUserProfile().setSubjects(ParseServer.getUserSubjectNumbers());
-
+        LocalUserProfile.loadUserProfile();
 		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
