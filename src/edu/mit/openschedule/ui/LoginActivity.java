@@ -33,7 +33,7 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
-        ParseServer.loadSubjectListInBackground(this);
+        ParseServer.loadSubjectListInBackground();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())

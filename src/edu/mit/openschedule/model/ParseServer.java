@@ -1,5 +1,6 @@
 package edu.mit.openschedule.model;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import edu.mit.openschedule.CustomApplication;
 import edu.mit.openschedule.R;
 import edu.mit.openschedule.model.Subjects.MeetingType;
 
@@ -54,11 +56,11 @@ public class ParseServer {
      * Loads whole subject list from the resources to the memory, in background
      * @param context Application context
      */
-    public static void loadSubjectListInBackground(final Context context) {
+    public static void loadSubjectListInBackground() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                loadSubjectList(context);
+                loadSubjectList();
             }
         }).start();
     }
@@ -68,14 +70,15 @@ public class ParseServer {
      * @param context Application context
      * @return The list of subjects in the semester
      */
-    public static synchronized List<Subject> loadSubjectList(Context context) {
+    public static synchronized List<Subject> loadSubjectList() {
         if (subjects != null) {
             return subjects;
         }
         subjects = new ArrayList<Subject>();
         try {
             // Read the subjects listing from the resources file and parse it into JSONObject
-            JSONObject subjects_json = new JSONObject(new Scanner(context.getResources().openRawResource(R.raw.subjects_sp2014)).useDelimiter("\\A").next());
+            InputStream in = CustomApplication.context.getResources().openRawResource(R.raw.subjects_sp2014);
+            JSONObject subjects_json = new JSONObject(new Scanner(in).useDelimiter("\\A").next());
             for (@SuppressWarnings("rawtypes") Iterator it = subjects_json.keys(); it.hasNext(); ) {
                 JSONObject subject_json = subjects_json.getJSONObject((String)it.next());
                 subjects.add(_getSubject(subject_json.getString("number"),
@@ -123,6 +126,8 @@ public class ParseServer {
         }
         return subject;
     }
+    
+
     
 //    private static String getSemester() {
 //        Calendar calendar = new GregorianCalendar();

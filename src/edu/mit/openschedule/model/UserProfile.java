@@ -123,10 +123,12 @@ public class UserProfile {
 		return false;
 	}
 	
-	public void setMeeting(Subject subject, MeetingType type, int meetingIndex) {
+	public void setMeeting(String subjectNumber, MeetingType type, int meetingIndex) {
 		for (int i = 0; i < subjects.size(); ++i) {
-			if (subjects.get(i) == subject) {
+			if (subjects.get(i).getNumber().equals(subjectNumber)) {
 				meetingNumber.get(type).set(i, meetingIndex);
+				// Cache this meeting locally, so that the next time it can be retrieved.
+				LocalUserProfile.setMeeting(subjectNumber, type, meetingIndex);
 			}
 		}
 	}
