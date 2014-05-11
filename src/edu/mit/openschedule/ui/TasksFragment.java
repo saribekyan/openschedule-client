@@ -211,10 +211,15 @@ public class TasksFragment extends Fragment {
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			return false;
 		}
+
+		public void setTasks(List<Task> notSubmittedTasksSorted) {
+			this.tasks = notSubmittedTasksSorted;
+		}
 	}
 	
 	public void refresh() {
 		if (mTasksAdapter != null) {
+			mTasksAdapter.setTasks(UserProfile.getUserProfile().getNotSubmittedTasksSorted());
 			mTasksAdapter.notifyDataSetChanged();
 		}
 	}
