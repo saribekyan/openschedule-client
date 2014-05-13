@@ -167,10 +167,12 @@ public class UserProfile {
 	        newTaskObject.put("Deadline", newTask.getClassDeadline().getTime());
 	        newTaskObject.put("TaskName", newTask.getName());
             newTaskObject.put("Location", newTask.getSubmitLocation());
+            newTaskObject.put("Submitted", "false");
             if (newTask.getStatus() == Status.UNFINISHED) {
                 newTaskObject.put("HoursSpent", -1);
             } else if (newTask.getStatus() == Status.SUBMITTED) {
-                newTaskObject.put("HoursSpent", -2);
+                newTaskObject.put("HoursSpent", newTask.getUsersSpent());
+                newTaskObject.put("Submitted", "true");
             } else {
                 newTaskObject.put("HoursSpent", newTask.getUsersSpent());
             }

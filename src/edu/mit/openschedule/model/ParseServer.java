@@ -147,13 +147,17 @@ public class ParseServer {
                 String subjectNumber = (String)task_map.get("SubjectNumber");
                 String taskName = (String)task_map.get("TaskName");
                 String location = (String)task_map.get("Location");
+                String submitted = (String)task_map.get("Submitted");
                 double hoursSpent = Double.parseDouble((String)task_map.get("HoursSpent"));
                 double othersSpent = Double.parseDouble((String)task_map.get("OthersSpent"));
                 Task newTask = new Task(subjectNumber, taskName, deadline).setSubmitLocation(location);
+                if (othersSpent > 0) {
+                    newTask.setOthersSpent(othersSpent);
+                }
                 if (hoursSpent > 0) {
-                    newTask.finish(othersSpent);
-                } else if (hoursSpent < -1.5) {
-                    newTask.finish(othersSpent);
+                    newTask.finish(hoursSpent);
+                } else if (submitted.equals("true")) {
+                    newTask.finish(hoursSpent);
                     newTask.submit();
                 }
                 result.add(newTask);
