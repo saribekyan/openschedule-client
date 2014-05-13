@@ -27,29 +27,30 @@
             android:name="edu.mit.openschedule.ui.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
-        
         <activity
             android:name="edu.mit.openschedule.ui.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="edu.mit.openschedule.ui.AddSubjectActivity"
             android:label="@string/title_activity_add_subject" >
         </activity>
-        
         <activity
             android:name="edu.mit.openschedule.ui.SubjectActivity"
             android:label="@string/title_activity_subject" >
         </activity>
-        
         <activity
             android:name="edu.mit.openschedule.ui.AddTaskActivity"
             android:label="@string/title_activity_add_task" >
+        </activity>
+        <activity
+            android:name="edu.mit.openschedule.ui.DateTimePickerActivity"
+            android:label="@string/title_activity_date_time_picker" >
         </activity>
     </application>
 

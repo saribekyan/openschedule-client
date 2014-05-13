@@ -1,5 +1,6 @@
 package edu.mit.openschedule.ui;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -23,6 +24,7 @@ import edu.mit.openschedule.model.UserProfile;
 public class TasksFragment extends Fragment {
 	
 	private TasksAdapter mTasksAdapter;
+	private ExpandableListView mExpListView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,11 +41,11 @@ public class TasksFragment extends Fragment {
 			}
 		});
 		
-		final ExpandableListView listView =
+		mExpListView =
 				(ExpandableListView) rootView.findViewById(R.id.tasks_exp_list);
 		
 		mTasksAdapter = new TasksAdapter(getActivity());
-		listView.setAdapter(mTasksAdapter);
+		mExpListView.setAdapter(mTasksAdapter);
 		
 		return rootView;
 	}
@@ -69,7 +71,7 @@ public class TasksFragment extends Fragment {
 		}
 
 		@Override
-		public View getChildView(int groupPosition, int childPosition,
+		public View getChildView(final int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
 			final Task task = tasks.get(groupPosition);
 			
@@ -84,7 +86,7 @@ public class TasksFragment extends Fragment {
 			
 			TextView finishedText =
 					(TextView) personalDeadline.findViewById(R.id.tasks_finished_text);
-			Button personalDeadlineButton =
+			final Button personalDeadlineButton =
 					(Button) personalDeadline.findViewById(R.id.tasks_button_pick_personal_date_time);
 			if (task.getStatus() == Status.UNFINISHED) {
 				personalDeadlineButton.setText(task.getPersonalDeadlineString());
@@ -94,7 +96,9 @@ public class TasksFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
-						
+						Intent intent = new Intent(getActivity(), DateTimePickerActivity.class);
+						intent.putExtra("task_id", task.getId());
+						startActivityForResult(intent, 0);
 					}
 				});
 			} else {
@@ -111,7 +115,9 @@ public class TasksFragment extends Fragment {
 				
 				@Override
 				public void onClick(View v) {
-					
+					Intent intent = new Intent(getActivity(), DateTimePickerActivity.class);
+					intent.putExtra("task_id", task.getId());
+					startActivityForResult(intent, 1);
 				}
 			});
 
@@ -135,9 +141,21 @@ public class TasksFragment extends Fragment {
 			
 			LinearLayout submitLocation = (LinearLayout)
 					rowView.findViewById(R.id.tasks_submit_location_layout);
-			TextView submitLocationText =
-					(TextView) submitLocation.findViewById(R.id.tasks_submit_location_value);
-			submitLocationText.setText(task.getSubmitLocation());
+			Button submitLocationButton =
+					(Button) submitLocation.findViewById(R.id.tasks_submit_location_button);
+			submitLocationButton.setText(task.getSubmitLocation());
+			submitLocationButton.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					DialogFragment dialog = new InfoDialogFragment();
+					Bundle bundle = new Bundle();
+					bundle.putInt("dialog_type", 0);
+					bundle.putInt("task_id", task.getId());
+					dialog.setArguments(bundle);
+					dialog.show(getActivity().getSupportFragmentManager(), "LocationDialog");
+				}
+			});
 			
 			if (task.getStatus() == Status.UNFINISHED) {
 				Button finishSubmitButton = (Button) rowView.findViewById(R.id.tasks_finish_submit_button);
@@ -146,18 +164,25 @@ public class TasksFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
-						DialogFragment timePickerFragment = new TimePickerFragment();
-						
+						DialogFragment dialog = new InfoDialogFragment();
 						Bundle bundle = new Bundle();
+						bundle.putInt("dialog_type", 1);
 						bundle.putInt("task_id", task.getId());
-					    timePickerFragment.setArguments(bundle);
-					    
-					    timePickerFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+						dialog.setArguments(bundle);
+						dialog.show(getActivity().getSupportFragmentManager(), "LocationDialog");						
 					}
 				});
 			} else {
 				Button finishSubmitButton = (Button) rowView.findViewById(R.id.tasks_finish_submit_button);
 				finishSubmitButton.setText("Just Submitted!");
+				finishSubmitButton.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						UserProfile.getUserProfile().getTask(task.getId()).submit();
+						TasksFragment.this.refresh();
+					}
+				});
 			}
 			
 			return rowView;
@@ -214,6 +239,32 @@ public class TasksFragment extends Fragment {
 
 		public void setTasks(List<Task> notSubmittedTasksSorted) {
 			this.tasks = notSubmittedTasksSorted;
+		}
+	}
+	
+	@Override
+	public void onActivityResult(int reqCode, int resultCode, Intent res) {
+		super.onActivityResult(reqCode, resultCode, res);
+		if (resultCode < 0) {
+			return;
+		}
+		UserProfile profile = UserProfile.getUserProfile();
+		
+		if (reqCode <= 1) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, res.getIntExtra("year", cal.get(Calendar.YEAR)));
+			cal.set(Calendar.MONTH, res.getIntExtra("month", cal.get(Calendar.MONTH)));
+			cal.set(Calendar.DAY_OF_MONTH, res.getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH)));
+			cal.set(Calendar.HOUR, res.getIntExtra("hour", cal.get(Calendar.HOUR_OF_DAY)));
+			cal.set(Calendar.MINUTE, res.getIntExtra("minute", cal.get(Calendar.MINUTE)));
+			int taskId = res.getIntExtra("task_id", 0);
+			if (reqCode == 0) {
+				profile.getTask(taskId).setPersonalDeadline(cal);
+			} else if (reqCode == 1) {
+				profile.getTask(taskId).changeClassDeadline(cal);
+			}
+		} else {
+			
 		}
 	}
 	

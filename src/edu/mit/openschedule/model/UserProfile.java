@@ -151,21 +151,13 @@ public class UserProfile {
 	}
 
 	public boolean addTask(int selectedSubjectId, int selectedTaskType,
-			int selectedNumber, int year, int month, int day, int hour,
-			int minute, String location) {
+			int selectedNumber, Calendar calendar, String location) {
 		Subject s = subjects.get(selectedSubjectId);
 		for (Task task : tasks) {
 			if (task.getSubject() == s && task.getTaskType() == selectedTaskType && task.getTaskNumber() == selectedNumber) {
 				return false;
 			}
 		}
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, month);
-		calendar.set(Calendar.DAY_OF_MONTH, day);
-		calendar.set(Calendar.HOUR, hour);
-		calendar.set(Calendar.MINUTE, minute);
 		tasks.add(new Task(s, selectedTaskType, selectedNumber, calendar).setSubmitLocation(location));
 		return true;
 	}

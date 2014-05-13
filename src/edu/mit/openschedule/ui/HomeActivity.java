@@ -22,9 +22,10 @@ import edu.mit.openschedule.model.LocalUserProfile;
 import edu.mit.openschedule.model.ParseServer;
 import edu.mit.openschedule.model.Subjects;
 import edu.mit.openschedule.model.UserProfile;
+import edu.mit.openschedule.ui.InfoDialogFragment.InfoDialogFragmentListener;
 
 public class HomeActivity extends ActionBarActivity implements
-		ActionBar.TabListener {
+		ActionBar.TabListener, InfoDialogFragmentListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -171,6 +172,28 @@ public class HomeActivity extends ActionBarActivity implements
 			}
 			return null;
 		}
+	}
+	
+	@Override
+	public void onDialogPositiveClick(InfoDialogFragment dialog, String text) {
+		if (text == null || text.equals(""))
+			return;
+		InfoDialogFragment my = (InfoDialogFragment) dialog;
+		UserProfile profile = UserProfile.getUserProfile();
+		if (my.getDialogType() == 0) {
+			profile.getTask(my.getTaskId()).setSubmitLocation(text);
+		} else {
+			try {
+				profile.getTask(my.getTaskId()).finish(Double.parseDouble(text));
+			} catch (NumberFormatException e){
+				// Fuck it.
+			}
+		}
+		((TasksFragment)mSectionsPagerAdapter.getItem(1)).refresh();
+	}
+
+	@Override
+	public void onDialogNegativeClick(InfoDialogFragment dialog) {
 	}
 	
 	@Override

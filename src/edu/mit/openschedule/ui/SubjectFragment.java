@@ -100,7 +100,7 @@ public class SubjectFragment extends Fragment {
 						inflater.inflate(R.layout.subject_meeting_times_child_layout, parent, false);
 				
 				TextView timeLocText = (TextView) childView.findViewById(R.id.subject_meeting_child_time_loc_text);
-				timeLocText.setText(meeting.getTimeString() + "(" + meeting.getLocationString() + ")");
+				timeLocText.setText(meeting.getTimeString() + " (" + meeting.getLocationString() + ")");
 				
 				timeLocText.setOnClickListener(new View.OnClickListener() {
 					

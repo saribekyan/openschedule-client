@@ -48,6 +48,11 @@ public class Task implements Comparable<Task> {
 		return this;
 	}
 	
+	public Task changeClassDeadline(Calendar cal) {
+		this.classDeadline = cal;
+		return this;
+	}
+	
 	public Task setOthersSpent(Double othersSpent) {
 		this.othersSpent = othersSpent;
 		return this;
@@ -58,12 +63,12 @@ public class Task implements Comparable<Task> {
 		return this;
 	}
 	
-	public Task finish(int hoursSpent, int minutesSpent) {
+	public Task finish(double spent) {
 		if (status != Status.UNFINISHED) {
 			throw new IllegalStateException();
 		}
 		status = Status.FINISHED;
-		userSpent = hoursSpent + minutesSpent / 60.0;
+		userSpent = spent;
 		return this;
 	}
 	
@@ -76,7 +81,7 @@ public class Task implements Comparable<Task> {
 	}
 	
 	public String getName() {
-		return subject.getNumber() + " " + TASKS[taskType] + " " + taskNumber;
+		return subject.getNumber() + "\n" + TASKS[taskType] + " " + taskNumber;
 	}
 	
 	public Status getStatus() {
@@ -87,13 +92,13 @@ public class Task implements Comparable<Task> {
 		if (status != Status.UNFINISHED) {
 			return "Finished";
 		}
-		return new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault())
+		return new SimpleDateFormat("MM/dd@hh:mmaa", Locale.getDefault())
 					.format(personalDeadline.getTime());
 	}
 
 	public String getClassDeadlineString() {
-		return new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault())
-					.format(classDeadline.getTime());		
+		return new SimpleDateFormat("MM/dd@hh:mmaa", Locale.getDefault())
+					.format(classDeadline.getTime());
 	}
 
 	public String getOthersSpentString() {

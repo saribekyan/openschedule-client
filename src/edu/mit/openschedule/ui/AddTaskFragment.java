@@ -1,9 +1,13 @@
 package edu.mit.openschedule.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,19 +29,16 @@ public class AddTaskFragment extends Fragment {
 		23, 24, 25, 26, 27, 28, 29, 30
 	};
 	
-	public static int year = -1;
-	public static int month = -1;
-	public static int day = -1;
-	public static int hour = -1;
-	public static int minute = -1;
-	public static Button selectTimeButton;
-	public static Button selectDateButton;
+	private final Calendar deadlineCalendar = new GregorianCalendar();
+	private Button dateTimeButton;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_add_task, container,
 				false);
+		
+		deadlineCalendar.clear();
 		
 		final Spinner selectSubject = (Spinner) rootView.findViewById(R.id.add_task_select_subject_dropdown);
 		List<String> subjectsString = UserProfile.getUserProfile().getSubjectsString();
@@ -55,42 +56,16 @@ public class AddTaskFragment extends Fragment {
 				getActivity(), R.layout.spinner_simple_text, NUMBERS);
 		selectAssignmentNumber.setAdapter(selectAssignmentNumberAdapter);
 		
-		selectTimeButton = (Button) rootView.findViewById(R.id.add_task_pick_class_time_button);
-		selectTimeButton.setOnClickListener(new OnClickListener() {
+		dateTimeButton = (Button) rootView.findViewById(R.id.add_task_button_pick_class_date_time);
+		dateTimeButton.setText("Click to enter");
+		dateTimeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				DialogFragment timePickerFragment = new TimePickerFragment();
-				
-				Bundle bundle = new Bundle();
-				bundle.putInt("task_id", -1);
-			    timePickerFragment.setArguments(bundle);
-			    
-			    timePickerFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+				Intent intent = new Intent(getActivity(), DateTimePickerActivity.class);
+				startActivityForResult(intent, 0);
 			}
 		});
-		
-		selectDateButton = (Button) rootView.findViewById(R.id.add_task_pick_class_date_button);
-		selectDateButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				DialogFragment datePickerFragment = new DatePickerFragment();
-				
-				Bundle bundle = new Bundle();
-				bundle.putInt("task_id", -1);
-				datePickerFragment.setArguments(bundle);
-			    
-				datePickerFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
-			}
-		});
-		
-		if (year != -1) {
-			selectDateButton.setText(month + "/" + day);
-		}
-		if (hour != -1) {
-			selectTimeButton.setText(hour + "/" + minute);
-		}
 		
 		final EditText locationEditText = (EditText) rootView.findViewById(R.id.add_task_submit_location_edittext);
 		
@@ -100,11 +75,26 @@ public class AddTaskFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				UserProfile profile = UserProfile.getUserProfile();
+				if (!deadlineCalendar.isSet(Calendar.DAY_OF_MONTH) || !deadlineCalendar.isSet(Calendar.HOUR_OF_DAY)) {
+					Toast.makeText(getActivity(), "Please enter the deadline", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
+				if (!deadlineCalendar.after(Calendar.getInstance())) {
+					Toast.makeText(getActivity(), "Please enter a valid daedline.", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
+				if (locationEditText.getText().toString().equals("")) {
+					Toast.makeText(getActivity(), "Please enter submit location", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
 				if (!profile.addTask(
 						selectSubject.getSelectedItemPosition(),
 						selectAssignment.getSelectedItemPosition(),
 						selectAssignmentNumber.getSelectedItemPosition(),
-						year, month, day, hour, minute,
+						deadlineCalendar,
 						locationEditText.getText().toString())) {
 					Toast.makeText(getActivity(), "Task already exists", Toast.LENGTH_LONG).show();
 					return;
@@ -115,5 +105,22 @@ public class AddTaskFragment extends Fragment {
 		});
 		
 		return rootView;
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent res) {
+		super.onActivityResult(requestCode, resultCode, res);
+		
+		if (resultCode < 0) {
+			return;
+		}
+		Calendar now = Calendar.getInstance();
+		deadlineCalendar.set(Calendar.YEAR, res.getIntExtra("year", now.get(Calendar.YEAR)));
+		deadlineCalendar.set(Calendar.MONTH, res.getIntExtra("month", now.get(Calendar.MONTH)));
+		deadlineCalendar.set(Calendar.DAY_OF_MONTH, res.getIntExtra("day", now.get(Calendar.DAY_OF_MONTH)));
+		deadlineCalendar.set(Calendar.HOUR, res.getIntExtra("hour", now.get(Calendar.HOUR_OF_DAY)));
+		deadlineCalendar.set(Calendar.MINUTE, res.getIntExtra("minute", now.get(Calendar.MINUTE)));
+		
+		dateTimeButton.setText(new SimpleDateFormat("MM/dd@hh:mmaa", Locale.getDefault()).format(deadlineCalendar.getTime()));
 	}
 }
