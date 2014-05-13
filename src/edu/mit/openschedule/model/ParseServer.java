@@ -141,30 +141,26 @@ public class ParseServer {
             HashMap<String, Object> tasks = ParseCloud.callFunction("getTaskList", params);
             for (String task_key : tasks.keySet()) {
                 @SuppressWarnings("unchecked")
-                HashMap<String, String> task_map = (HashMap<String, String>)tasks.get(task_key);
+                HashMap<String, Object> task_map = (HashMap<String, Object>)tasks.get(task_key);
                 Calendar deadline = new GregorianCalendar();
-                deadline.setTime(new Date(task_map.get("Deadline")));
+                deadline.setTime(new Date((String)task_map.get("Deadline")));
                 String subjectNumber = (String)task_map.get("SubjectNumber");
                 String taskName = (String)task_map.get("TaskName");
                 String location = (String)task_map.get("Location");
+                double hoursSpent = Double.parseDouble((String)task_map.get("HoursSpent"));
+                double othersSpent = Double.parseDouble((String)task_map.get("OthersSpent"));
                 Task newTask = new Task(subjectNumber, taskName, deadline).setSubmitLocation(location);
+                if (hoursSpent > 0) {
+                    newTask.finish(othersSpent);
+                } else if (hoursSpent < -1.5) {
+                    newTask.finish(othersSpent);
+                    newTask.submit();
+                }
                 result.add(newTask);
-//                UserProfile.getUserProfile().addTask(newTask, false);
             }
         } catch (ParseException e) { }
         catch (RuntimeException e) { } // It's thrown when the thread is interrupted
         return result;
     }
 
-    
-//    private static String getSemester() {
-//        Calendar calendar = new GregorianCalendar();
-//        int month = calendar.get(GregorianCalendar.MONTH);
-//        int year = calendar.get(GregorianCalendar.YEAR);
-//        if (month < 5) {
-//            return "sp"+year;
-//        } else {
-//            return "fa"+year;
-//        }
-//    }
 }

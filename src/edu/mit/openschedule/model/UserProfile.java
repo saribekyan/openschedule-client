@@ -150,6 +150,12 @@ public class UserProfile {
 	public boolean addTask(Task newTask, boolean addOnServer) {
 		for (int i = 0; i < tasks.size(); i++) {
 		    if (tasks.get(i).getName().equals(newTask.getName())) {
+                Status oldStatus = tasks.get(i).getStatus();
+                Status newStatus = newTask.getStatus();
+		        if ((oldStatus == Status.FINISHED && newStatus == Status.UNFINISHED) ||
+		            (oldStatus == Status.SUBMITTED && newStatus == Status.FINISHED)) {
+		            return false;
+		        }
 		        tasks.remove(i);
 		    }
 		}
@@ -161,6 +167,13 @@ public class UserProfile {
 	        newTaskObject.put("Deadline", newTask.getClassDeadline().getTime());
 	        newTaskObject.put("TaskName", newTask.getName());
             newTaskObject.put("Location", newTask.getSubmitLocation());
+            if (newTask.getStatus() == Status.UNFINISHED) {
+                newTaskObject.put("HoursSpent", -1);
+            } else if (newTask.getStatus() == Status.SUBMITTED) {
+                newTaskObject.put("HoursSpent", -2);
+            } else {
+                newTaskObject.put("HoursSpent", newTask.getUsersSpent());
+            }
             newTaskObject.put("Username", ParseUser.getCurrentUser().getUsername());
 	        newTaskObject.setACL(new ParseACL());
 	        newTaskObject.saveInBackground();

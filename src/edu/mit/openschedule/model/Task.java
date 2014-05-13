@@ -115,6 +115,13 @@ public class Task implements Comparable<Task> {
 		return String.format(Locale.getDefault(), "%.1f hours", userSpent);
 	}
 	
+	public double getUsersSpent() {
+	    if (status == Status.UNFINISHED) {
+            throw new IllegalStateException();
+        }
+        return userSpent;
+	}
+	
 	public String getSubmitLocation() {
 		return submitLocation;
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract.Profile;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -208,7 +209,9 @@ public class TasksFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
-						UserProfile.getUserProfile().getTask(task.getName()).submit();
+					    UserProfile profile = UserProfile.getUserProfile();
+						profile.getTask(task.getName()).submit();
+						profile.addTask(profile.getTask(task.getName()), true);
 						TasksFragment.this.refresh();
 					}
 				});

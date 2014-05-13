@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -187,9 +188,9 @@ public class HomeActivity extends ActionBarActivity implements
 		} else {
 			try {
 				profile.getTask(my.getTaskName()).finish(Double.parseDouble(text));
+				profile.addTask(profile.getTask(my.getTaskName()), true);
 			} catch (NumberFormatException e){
-				// Fuck it. (hayk)
-			    // LOOOOL (tsotne)
+				Toast.makeText(this, R.string.time_spent_is_number, Toast.LENGTH_LONG).show();
 			}
 		}
 		((TasksFragment)mSectionsPagerAdapter.getItem(1)).refresh();

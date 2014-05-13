@@ -50,5 +50,5 @@
     <string name="date_time_activity_select_text">Select</string>
     <string name="dialog_done">Done</string>
     <string name="dialog_cancel">Cancel</string>
-
+    <string name="time_spent_is_number">Please type in positive number</string>
 </resources>
