@@ -284,7 +284,7 @@ public class TasksFragment extends Fragment {
 			cal.set(Calendar.YEAR, res.getIntExtra("year", cal.get(Calendar.YEAR)));
 			cal.set(Calendar.MONTH, res.getIntExtra("month", cal.get(Calendar.MONTH)));
 			cal.set(Calendar.DAY_OF_MONTH, res.getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH)));
-			cal.set(Calendar.HOUR, res.getIntExtra("hour", cal.get(Calendar.HOUR_OF_DAY)));
+			cal.set(Calendar.HOUR_OF_DAY, res.getIntExtra("hour", cal.get(Calendar.HOUR_OF_DAY)));
 			cal.set(Calendar.MINUTE, res.getIntExtra("minute", cal.get(Calendar.MINUTE)));
 			String taskName = res.getStringExtra("task_name");
 			if (reqCode == 0) {
