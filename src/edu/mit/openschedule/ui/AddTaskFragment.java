@@ -31,14 +31,22 @@ public class AddTaskFragment extends Fragment {
 	
 	private final Calendar deadlineCalendar = new GregorianCalendar();
 	private Button dateTimeButton;
+	private Bundle mSavedInstanceState;
+	
+	public AddTaskFragment() {
+		super();
+		deadlineCalendar.clear();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		mSavedInstanceState = savedInstanceState;
+		if (mSavedInstanceState != null && mSavedInstanceState.containsKey("deadline")) {
+			deadlineCalendar.setTimeInMillis(mSavedInstanceState.getLong("deadline"));
+		}
 		View rootView = inflater.inflate(R.layout.fragment_add_task, container,
 				false);
-		
-		deadlineCalendar.clear();
 		
 		final Spinner selectSubject = (Spinner) rootView.findViewById(R.id.add_task_select_subject_dropdown);
 		List<String> subjectsString = UserProfile.getUserProfile().getSubjectsString();
@@ -57,7 +65,11 @@ public class AddTaskFragment extends Fragment {
 		selectAssignmentNumber.setAdapter(selectAssignmentNumberAdapter);
 		
 		dateTimeButton = (Button) rootView.findViewById(R.id.add_task_button_pick_class_date_time);
-		dateTimeButton.setText("Click to enter");
+		if (!deadlineCalendar.isSet(Calendar.YEAR)) {
+			dateTimeButton.setText("Click to enter");
+		} else {
+			dateTimeButton.setText(new SimpleDateFormat("MM/dd@hh:mmaa", Locale.getDefault()).format(deadlineCalendar.getTime()));
+		}
 		dateTimeButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -75,7 +87,7 @@ public class AddTaskFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				UserProfile profile = UserProfile.getUserProfile();
-				if (!deadlineCalendar.isSet(Calendar.DAY_OF_MONTH) || !deadlineCalendar.isSet(Calendar.HOUR_OF_DAY)) {
+				if (!deadlineCalendar.isSet(Calendar.YEAR) ) {
 					Toast.makeText(getActivity(), "Please enter the deadline", Toast.LENGTH_LONG).show();
 					return;
 				}
@@ -118,9 +130,15 @@ public class AddTaskFragment extends Fragment {
 		deadlineCalendar.set(Calendar.YEAR, res.getIntExtra("year", now.get(Calendar.YEAR)));
 		deadlineCalendar.set(Calendar.MONTH, res.getIntExtra("month", now.get(Calendar.MONTH)));
 		deadlineCalendar.set(Calendar.DAY_OF_MONTH, res.getIntExtra("day", now.get(Calendar.DAY_OF_MONTH)));
-		deadlineCalendar.set(Calendar.HOUR, res.getIntExtra("hour", now.get(Calendar.HOUR_OF_DAY)));
+		deadlineCalendar.set(Calendar.HOUR_OF_DAY, res.getIntExtra("hour", now.get(Calendar.HOUR_OF_DAY)));
 		deadlineCalendar.set(Calendar.MINUTE, res.getIntExtra("minute", now.get(Calendar.MINUTE)));
 		
 		dateTimeButton.setText(new SimpleDateFormat("MM/dd@hh:mmaa", Locale.getDefault()).format(deadlineCalendar.getTime()));
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putLong("deadline", deadlineCalendar.getTimeInMillis());
 	}
 }

@@ -9,7 +9,8 @@
         android:id="@+id/tasks_personal_deadline_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <TextView
             android:layout_height="@dimen/task_attr_height"
