@@ -125,7 +125,7 @@ public class CalendarFragment extends Fragment {
 				button.setGravity(Gravity.TOP);
 				if (!meetingNamePosition.containsKey(meeting) ||
 						meetingNamePosition.get(meeting) == position) {
-					button.setText(meeting.getSubject().getNumber() + " " + meeting.getTypeString());
+					button.setText(meeting.getSubject().getNumber() + " " + meeting.getTypeString() + " (" + meeting.getLocationString() + ")");
 					meetingNamePosition.put(meeting, position);
 				}
 				if (!meetingColor.containsKey(meeting)) {
