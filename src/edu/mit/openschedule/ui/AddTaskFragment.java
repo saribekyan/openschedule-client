@@ -93,7 +93,7 @@ public class AddTaskFragment extends Fragment {
 				}
 				
 				if (!deadlineCalendar.after(Calendar.getInstance())) {
-					Toast.makeText(getActivity(), "Please enter a valid daedline.", Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), "Please enter a valid deadline.", Toast.LENGTH_LONG).show();
 					return;
 				}
 				

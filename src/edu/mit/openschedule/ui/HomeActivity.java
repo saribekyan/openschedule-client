@@ -203,6 +203,7 @@ public class HomeActivity extends ActionBarActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+		((CalendarFragment)mSectionsPagerAdapter.getItem(0)).refresh();
 		((TasksFragment)mSectionsPagerAdapter.getItem(1)).refresh();
 	}
 }
