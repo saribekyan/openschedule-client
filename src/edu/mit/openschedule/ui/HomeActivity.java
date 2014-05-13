@@ -182,6 +182,8 @@ public class HomeActivity extends ActionBarActivity implements
 		UserProfile profile = UserProfile.getUserProfile();
 		if (my.getDialogType() == 0) {
 			profile.getTask(my.getTaskName()).setSubmitLocation(text);
+			// Send the changes to the server
+			UserProfile.getUserProfile().addTask(profile.getTask(my.getTaskName()), true);
 		} else {
 			try {
 				profile.getTask(my.getTaskName()).finish(Double.parseDouble(text));

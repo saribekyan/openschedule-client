@@ -31,10 +31,6 @@ public class UserProfile {
 		meetingNumber.put(MeetingType.LECTURE, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.RECITATION, new ArrayList<Integer>());
 		meetingNumber.put(MeetingType.LAB, new ArrayList<Integer>());
-
-//		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online"));
-//		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30));
-//		tasks.add(new Task("18.06 pset 4", Calendar.getInstance()).setOthersSpent(5.0).setSubmitLocation("online").finish(10, 30).submit());
 	}
 	
 	public static UserProfile getUserProfile() {
