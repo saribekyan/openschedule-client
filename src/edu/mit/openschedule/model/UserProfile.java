@@ -134,13 +134,13 @@ public class UserProfile {
 		}
 	}
 
-	public Task getTask(int taskId) {
+	public Task getTask(String taskName) {
 		for (Task task : tasks) {
-			if (task.getId() == taskId) {
+			if (task.getName().equals(taskName)) {
 				return task;
 			}
 		}
-		throw new RuntimeException("no such id");
+		throw new RuntimeException("no such taskName");
 	}
 
 	public List<String> getSubjectsString() {
@@ -169,7 +169,6 @@ public class UserProfile {
 	        newTaskObject.setACL(new ParseACL());
 	        newTaskObject.saveInBackground();
 		}
-		
 		return true;
 	}
 	

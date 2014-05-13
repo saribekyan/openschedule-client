@@ -3,17 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <Button
-        android:id="@+id/subjects_add_subject_button"
+    
+    <EditText 
+        android:id="@+id/dialog_enter_text_id"
         android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/subjects_add_class_button" />
-
-    <ListView
-        android:id="@+id/subjects_subject_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
-
+        android:inputType="text" />
+   	
 </LinearLayout>
