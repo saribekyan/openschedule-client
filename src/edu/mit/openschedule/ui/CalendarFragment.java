@@ -32,6 +32,7 @@ import edu.mit.openschedule.model.WeekdayTime;
 public class CalendarFragment extends Fragment {
 	
 	private Calendar calendar;
+	private CalendarAdapter adapter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +49,7 @@ public class CalendarFragment extends Fragment {
 		
 		final ListView listView = (ListView) rootView.findViewById(R.id.calendar_list);
 		
-		CalendarAdapter adapter = new CalendarAdapter(getActivity());
+		adapter = new CalendarAdapter(getActivity());
 		listView.setAdapter(adapter);
 		
 		setChangeDayEventHandler(topLayout.findViewById(R.id.calendar_next_day_button), date, +1, adapter);
@@ -79,12 +80,7 @@ public class CalendarFragment extends Fragment {
 			super(context, R.layout.calendar_row_layout);
 			this.context = context;
 			times = new ArrayList<Time>();
-			
-			Time current = Time.START;
-			while (current.before(Time.END)) {
-				times.add(current);
-				current = current.timeAfter(30);
-			}
+			updateTimes();
 			this.addAll(times);
 		}
 		
@@ -175,6 +171,22 @@ public class CalendarFragment extends Fragment {
 			default:
 				throw new IllegalStateException();
 			}
+		}
+
+		public void updateTimes() {
+			times.clear();
+			Time current = Time.START;
+			while (current.before(Time.END)) {
+				times.add(current);
+				current = current.timeAfter(30);
+			}
+		}
+	}
+
+	public void refresh() {
+		if (adapter != null) {
+			adapter.updateTimes();
+			adapter.notifyDataSetChanged();
 		}
 	}
 }

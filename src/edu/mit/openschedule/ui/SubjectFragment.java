@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -42,12 +41,12 @@ public class SubjectFragment extends Fragment {
 		
 		((RatingBar) rootView.findViewById(R.id.subject_rating_ratingbar)).setRating(subject.getRating());
 		
-		Button addRemoveClass = (Button) rootView.findViewById(R.id.subject_add_remove_subject_button);
-		if (UserProfile.getUserProfile().isTaking(subject)) {
-			addRemoveClass.setText("Remove Class");
-		} else {
-			addRemoveClass.setText("Add Class");
-		}
+//		Button addRemoveClass = (Button) rootView.findViewById(R.id.subject_add_remove_subject_button);
+//		if (UserProfile.getUserProfile().isTaking(subject)) {
+//			addRemoveClass.setText("Remove Class");
+//		} else {
+//			addRemoveClass.setText("Add Class");
+//		}
 		
 		return rootView;
 	}

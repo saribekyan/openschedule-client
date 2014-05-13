@@ -13,12 +13,13 @@
     </ExpandableListView>
 
     <include layout="@layout/subject_rating_group_layout"/>
-    
+
     <Button
         android:id="@+id/subject_add_remove_subject_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/subjects_add_class_button" />
+        android:text="@string/subjects_add_class_button"
+        android:visibility="gone" />
 
 </LinearLayout>
