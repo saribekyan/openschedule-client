@@ -2,7 +2,11 @@ package edu.mit.openschedule.model;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -14,6 +18,7 @@ import org.json.JSONObject;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,7 +31,7 @@ import edu.mit.openschedule.model.Subjects.MeetingType;
 public class ParseServer {
 
     private static List<Subject> subjects = null;
-    
+
     /**
      * @return the list containing subject numbers that the student is taking.
      * For example: ["6.004", "6.005", "18.02", "21F.222"].
@@ -126,6 +131,30 @@ public class ParseServer {
         return subject;
     }
     
+    @SuppressWarnings("deprecation")
+    public static List<Task> loadTaskList(List<String> classes) {
+        List<Task> result = new ArrayList<Task>();
+        try {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("subjectNumbers", classes);
+            params.put("username", ParseUser.getCurrentUser().getUsername());
+            HashMap<String, Object> tasks = ParseCloud.callFunction("getTaskList", params);
+            for (String task_key : tasks.keySet()) {
+                @SuppressWarnings("unchecked")
+                HashMap<String, String> task_map = (HashMap<String, String>)tasks.get(task_key);
+                Calendar deadline = new GregorianCalendar();
+                deadline.setTime(new Date(task_map.get("Deadline")));
+                String subjectNumber = (String)task_map.get("SubjectNumber");
+                String taskName = (String)task_map.get("TaskName");
+                String location = (String)task_map.get("Location");
+                Task newTask = new Task(subjectNumber, taskName, deadline).setSubmitLocation(location);
+                result.add(newTask);
+//                UserProfile.getUserProfile().addTask(newTask, false);
+            }
+        } catch (ParseException e) { }
+        catch (RuntimeException e) { } // It's thrown when the thread is interrupted
+        return result;
+    }
 
     
 //    private static String getSemester() {

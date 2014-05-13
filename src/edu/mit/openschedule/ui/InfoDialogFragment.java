@@ -76,4 +76,8 @@ public class InfoDialogFragment extends DialogFragment {
 	public int getTaskId() {
 		return getArguments().getInt("task_id");
 	}
+	
+	public String getTaskName() {
+        return getArguments().getString("task_name");
+	}
 }

@@ -38,7 +38,7 @@ public class DateTimePickerFragment extends Fragment {
 				intent.putExtra("day", datePicker.getDayOfMonth());
 				intent.putExtra("hour", timePicker.getCurrentHour());
 				intent.putExtra("minute", timePicker.getCurrentMinute());
-				intent.putExtra("task_id", getActivity().getIntent().getIntExtra("task_id", 0));
+				intent.putExtra("task_name", getActivity().getIntent().getStringExtra("task_name"));
 				
 				getActivity().setResult(0, intent);
 				getActivity().finish();

@@ -102,12 +102,13 @@ public class AddTaskFragment extends Fragment {
 					return;
 				}
 				
-				if (!profile.addTask(
-						selectSubject.getSelectedItemPosition(),
-						selectAssignment.getSelectedItemPosition(),
-						selectAssignmentNumber.getSelectedItemPosition(),
-						deadlineCalendar,
-						locationEditText.getText().toString())) {
+                String subjectNumber = profile.getSubjects().get(selectSubject.getSelectedItemPosition()).getNumber();
+                Task newTask = new Task(subjectNumber,
+                                        subjectNumber + " " + Task.TASKS[selectAssignment.getSelectedItemPosition()]
+                                                          + " " + selectAssignmentNumber.getSelectedItemPosition(),
+                                        deadlineCalendar);
+                newTask.setSubmitLocation(locationEditText.getText().toString());
+                if (!profile.addTask(newTask, true)) {
 					Toast.makeText(getActivity(), "Task already exists", Toast.LENGTH_LONG).show();
 					return;
 				}

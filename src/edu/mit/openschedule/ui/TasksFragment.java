@@ -17,6 +17,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.ParseServer;
 import edu.mit.openschedule.model.Task;
 import edu.mit.openschedule.model.Task.Status;
 import edu.mit.openschedule.model.UserProfile;
@@ -24,6 +25,8 @@ import edu.mit.openschedule.model.UserProfile;
 public class TasksFragment extends Fragment {
 	
 	private TasksAdapter mTasksAdapter;
+	private Thread updateTasks; // This thread refreshes task list in every REFRESH_INTERVAL milliseconds
+	private static final int REFRESH_INTERVAL = 1000;
 	private ExpandableListView mExpListView;
 	
 	@Override
@@ -47,7 +50,33 @@ public class TasksFragment extends Fragment {
 		mTasksAdapter = new TasksAdapter(getActivity());
 		mExpListView.setAdapter(mTasksAdapter);
 		
+		updateTasks = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        List<String> subjectNumbers = UserProfile.getUserProfile().getSubjectNumbers();
+                        List<Task> tasks = ParseServer.loadTaskList(subjectNumbers);
+                        refreshFromBackground(tasks);
+                        Thread.sleep(REFRESH_INTERVAL);
+                    }
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        });
+		updateTasks.start();
+		
 		return rootView;
+	}
+	
+	@Override
+	public void onDestroy() {
+	    updateTasks.interrupt();
+	    try {
+            updateTasks.join();
+        } catch (InterruptedException e) { }
+	    super.onDestroy();
 	}
 	
 	private class TasksAdapter extends BaseExpandableListAdapter {
@@ -97,7 +126,7 @@ public class TasksFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(getActivity(), DateTimePickerActivity.class);
-						intent.putExtra("task_id", task.getId());
+						intent.putExtra("task_name", task.getName());
 						startActivityForResult(intent, 0);
 					}
 				});
@@ -116,7 +145,7 @@ public class TasksFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), DateTimePickerActivity.class);
-					intent.putExtra("task_id", task.getId());
+					intent.putExtra("task_name", task.getName());
 					startActivityForResult(intent, 1);
 				}
 			});
@@ -151,7 +180,7 @@ public class TasksFragment extends Fragment {
 					DialogFragment dialog = new InfoDialogFragment();
 					Bundle bundle = new Bundle();
 					bundle.putInt("dialog_type", 0);
-					bundle.putInt("task_id", task.getId());
+					bundle.putString("task_name", task.getName());
 					dialog.setArguments(bundle);
 					dialog.show(getActivity().getSupportFragmentManager(), "LocationDialog");
 				}
@@ -167,7 +196,7 @@ public class TasksFragment extends Fragment {
 						DialogFragment dialog = new InfoDialogFragment();
 						Bundle bundle = new Bundle();
 						bundle.putInt("dialog_type", 1);
-						bundle.putInt("task_id", task.getId());
+						bundle.putString("task_name", task.getName());
 						dialog.setArguments(bundle);
 						dialog.show(getActivity().getSupportFragmentManager(), "LocationDialog");						
 					}
@@ -179,7 +208,7 @@ public class TasksFragment extends Fragment {
 					
 					@Override
 					public void onClick(View v) {
-						UserProfile.getUserProfile().getTask(task.getId()).submit();
+						UserProfile.getUserProfile().getTask(task.getName()).submit();
 						TasksFragment.this.refresh();
 					}
 				});
@@ -257,11 +286,11 @@ public class TasksFragment extends Fragment {
 			cal.set(Calendar.DAY_OF_MONTH, res.getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH)));
 			cal.set(Calendar.HOUR_OF_DAY, res.getIntExtra("hour", cal.get(Calendar.HOUR_OF_DAY)));
 			cal.set(Calendar.MINUTE, res.getIntExtra("minute", cal.get(Calendar.MINUTE)));
-			int taskId = res.getIntExtra("task_id", 0);
+			String taskName = res.getStringExtra("task_name");
 			if (reqCode == 0) {
-				profile.getTask(taskId).setPersonalDeadline(cal);
+				profile.getTask(taskName).setPersonalDeadline(cal);
 			} else if (reqCode == 1) {
-				profile.getTask(taskId).changeClassDeadline(cal);
+				profile.getTask(taskName).changeClassDeadline(cal);
 			}
 		} else {
 			
@@ -273,5 +302,16 @@ public class TasksFragment extends Fragment {
 			mTasksAdapter.setTasks(UserProfile.getUserProfile().getNotSubmittedTasksSorted());
 			mTasksAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	public void refreshFromBackground(final List<Task> tasks) {
+        TasksFragment.this.getActivity().runOnUiThread(
+    	    new Runnable() {
+                @Override
+                public void run() {
+                    UserProfile.getUserProfile().setTasks(tasks, false);
+                    TasksFragment.this.refresh();
+                }
+            });
 	}
 }

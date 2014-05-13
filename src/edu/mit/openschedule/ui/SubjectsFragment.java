@@ -31,7 +31,7 @@ public class SubjectsFragment extends Fragment {
 		
 		ListView listView = (ListView) rootView.findViewById(R.id.subjects_subject_list);
 		final SubjectsArrayAdapter adapter = new SubjectsArrayAdapter(
-				getActivity(), UserProfile.getUserProfile().getSubjectList());
+				getActivity(), UserProfile.getUserProfile().getSubjects());
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

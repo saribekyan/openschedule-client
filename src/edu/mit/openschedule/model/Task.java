@@ -11,15 +11,14 @@ public class Task implements Comparable<Task> {
 	private static int taskIds = 0;
 	private final int taskId;
 	
-	private Subject subject;
-	private int taskType;
-	private int taskNumber;
+	private String name;
 	
 	private Calendar personalDeadline;
 	private Calendar classDeadline;
 	private Double othersSpent;
 	private Double userSpent;
 	private String submitLocation;
+	private String subjectNumber;
 	
 	public enum Status {
 		UNFINISHED, FINISHED, SUBMITTED
@@ -27,13 +26,10 @@ public class Task implements Comparable<Task> {
 	
 	private Status status;
 	
-	public Task(Subject subject, int taskType, int taskId,
-			Calendar classDeadline) {
-		this.subject = subject;
-		this.taskType = taskType;
-		this.taskNumber = taskId;
+	public Task(String subjectNumber, String taskName, Calendar classDeadline) {
+	    this.subjectNumber = subjectNumber;
+	    this.name = taskName;
 		this.classDeadline = classDeadline;
-		
 		this.taskId = taskIds++;
 		personalDeadline = Calendar.getInstance();
 		personalDeadline.setTime(classDeadline.getTime());
@@ -65,7 +61,7 @@ public class Task implements Comparable<Task> {
 	
 	public Task finish(double spent) {
 		if (status != Status.UNFINISHED) {
-			throw new IllegalStateException();
+			throw new IllegalStateException("The status was"+status.toString()+" instead of UNFINISHED");
 		}
 		status = Status.FINISHED;
 		userSpent = spent;
@@ -81,7 +77,7 @@ public class Task implements Comparable<Task> {
 	}
 	
 	public String getName() {
-		return subject.getNumber() + "\n" + TASKS[taskType] + " " + taskNumber;
+	    return name;
 	}
 	
 	public Status getStatus() {
@@ -96,6 +92,10 @@ public class Task implements Comparable<Task> {
 					.format(personalDeadline.getTime());
 	}
 
+	public Calendar getClassDeadline() {
+	    return classDeadline;
+	}
+	
 	public String getClassDeadlineString() {
 		return new SimpleDateFormat("MM/dd@hh:mmaa", Locale.getDefault())
 					.format(classDeadline.getTime());
@@ -119,18 +119,6 @@ public class Task implements Comparable<Task> {
 		return submitLocation;
 	}
 	
-	public Subject getSubject() {
-		return subject;
-	}
-	
-	public int getTaskType() {
-		return taskType;
-	}
-	
-	public int getTaskNumber() {
-		return taskNumber;
-	}
-	
 	@Override
 	public int compareTo(Task another) {
 		if (personalDeadline.before(another.personalDeadline)) {
@@ -145,4 +133,8 @@ public class Task implements Comparable<Task> {
 	public int getId() {
 		return taskId;
 	}
+	
+	public String getSubjectNumber() {
+        return subjectNumber;
+    }
 }
