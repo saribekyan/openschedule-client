@@ -1,5 +1,6 @@
 package edu.mit.openschedule.ui;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.os.Bundle;
@@ -100,12 +101,13 @@ public class AddTaskFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				UserProfile profile = UserProfile.getUserProfile();
-				if (!profile.addTask(
-						selectSubject.getSelectedItemPosition(),
-						selectAssignment.getSelectedItemPosition(),
-						selectAssignmentNumber.getSelectedItemPosition(),
-						year, month, day, hour, minute,
-						locationEditText.getText().toString())) {
+				String subjectNumber = profile.getSubjects().get(selectSubject.getSelectedItemPosition()).getNumber();
+				Task newTask = new Task(subjectNumber,
+                                        subjectNumber + " " + Task.TASKS[selectAssignment.getSelectedItemPosition()]
+                                                          + " " + selectAssignmentNumber.getSelectedItemPosition(),
+                                        new GregorianCalendar(year, month, day, hour, minute));
+				newTask.setSubmitLocation(locationEditText.getText().toString());
+				if (!profile.addTask(newTask, true)) {
 					Toast.makeText(getActivity(), "Task already exists", Toast.LENGTH_LONG).show();
 					return;
 				}

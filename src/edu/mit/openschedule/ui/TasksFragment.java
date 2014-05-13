@@ -16,6 +16,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import edu.mit.openschedule.R;
+import edu.mit.openschedule.model.ParseServer;
 import edu.mit.openschedule.model.Task;
 import edu.mit.openschedule.model.Task.Status;
 import edu.mit.openschedule.model.UserProfile;
@@ -23,6 +24,8 @@ import edu.mit.openschedule.model.UserProfile;
 public class TasksFragment extends Fragment {
 	
 	private TasksAdapter mTasksAdapter;
+	private Thread updateTasks; // This thread refreshes task list in every REFRESH_INTERVAL milliseconds
+	private static final int REFRESH_INTERVAL = 1000;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +48,33 @@ public class TasksFragment extends Fragment {
 		mTasksAdapter = new TasksAdapter(getActivity());
 		listView.setAdapter(mTasksAdapter);
 		
+		updateTasks = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        List<String> subjectNumbers = UserProfile.getUserProfile().getSubjectNumbers();
+                        List<Task> tasks = ParseServer.loadTaskList(subjectNumbers);
+                        refreshFromBackground(tasks);
+                        Thread.sleep(REFRESH_INTERVAL);
+                    }
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        });
+		updateTasks.start();
+		
 		return rootView;
+	}
+	
+	@Override
+	public void onDestroy() {
+	    updateTasks.interrupt();
+	    try {
+            updateTasks.join();
+        } catch (InterruptedException e) { }
+	    super.onDestroy();
 	}
 	
 	private class TasksAdapter extends BaseExpandableListAdapter {
@@ -222,5 +251,16 @@ public class TasksFragment extends Fragment {
 			mTasksAdapter.setTasks(UserProfile.getUserProfile().getNotSubmittedTasksSorted());
 			mTasksAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	public void refreshFromBackground(final List<Task> tasks) {
+        TasksFragment.this.getActivity().runOnUiThread(
+    	    new Runnable() {
+                @Override
+                public void run() {
+                    UserProfile.getUserProfile().setTasks(tasks, false);
+                    TasksFragment.this.refresh();
+                }
+            });
 	}
 }

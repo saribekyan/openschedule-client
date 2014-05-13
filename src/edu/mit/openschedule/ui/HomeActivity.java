@@ -1,5 +1,6 @@
 package edu.mit.openschedule.ui;
 
+import java.util.List;
 import java.util.Locale;
 
 import android.content.Intent;
@@ -43,8 +44,6 @@ public class HomeActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 		setContentView(R.layout.activity_home);
 		getSupportActionBar().setTitle(R.string.app_name);
 		// Set up the action bar.
@@ -52,13 +51,14 @@ public class HomeActivity extends ActionBarActivity implements
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         Subjects.addSubjects(ParseServer.loadSubjectList());
-        UserProfile.getUserProfile().setSubjects(ParseServer.getUserSubjectNumbers());
+        List<String> userSubjectNumbers = ParseServer.getUserSubjectNumbers();
+        UserProfile.getUserProfile().setSubjects(userSubjectNumbers);
         LocalUserProfile.loadUserProfile();
+        UserProfile.getUserProfile().setTasks(ParseServer.loadTaskList(userSubjectNumbers), false);
 		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);

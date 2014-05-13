@@ -1,11 +1,14 @@
 package edu.mit.openschedule.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.parse.ParseACL;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import edu.mit.openschedule.model.Subject.Meeting;
 import edu.mit.openschedule.model.Subjects.MeetingType;
@@ -19,8 +22,9 @@ public class UserProfile {
 	private Map< MeetingType, List<Integer> > meetingNumber =
 			new HashMap<MeetingType, List<Integer> >();
 	
-	private List<Task> tasks =
-			new ArrayList<Task>();
+	private List<Task> tasks = new ArrayList<Task>();
+	
+	private List<String> subjectNumbers;
 	
 	// Singleton
 	private UserProfile() {
@@ -46,6 +50,7 @@ public class UserProfile {
 	
 	public void setSubjects(List<String> subjectNumbers) {
 	    this.subjects = new ArrayList<Subject>();
+	    this.subjectNumbers = new ArrayList<String>(subjectNumbers);
 	    for(int i = 0; i < subjectNumbers.size(); ++i) {
 	    	subjects.add(Subjects.findByNumber(subjectNumbers.get(i)));
 	        for (MeetingType m : MeetingType.values()) {
@@ -100,10 +105,6 @@ public class UserProfile {
 		Collections.sort(resultList);
 		return resultList;
 	}
-	
-	public List<Subject> getSubjectList() {
-		return subjects;
-	}
 
 	public Integer getMeetingIdFor(Subject subject, MeetingType type) {
 		for (int i = 0; i < subjects.size(); ++i) {
@@ -150,23 +151,35 @@ public class UserProfile {
 		return subjectsString;
 	}
 
-	public boolean addTask(int selectedSubjectId, int selectedTaskType,
-			int selectedNumber, int year, int month, int day, int hour,
-			int minute, String location) {
-		Subject s = subjects.get(selectedSubjectId);
-		for (Task task : tasks) {
-			if (task.getSubject() == s && task.getTaskType() == selectedTaskType && task.getTaskNumber() == selectedNumber) {
-				return false;
-			}
+	public boolean addTask(Task newTask, boolean addOnServer) {
+		for (int i = 0; i < tasks.size(); i++) {
+		    if (tasks.get(i).getName().equals(newTask.getName())) {
+		        tasks.remove(i);
+		    }
+		}
+		tasks.add(newTask);
+		// Add your task in the global database
+		if (addOnServer) {
+	        ParseObject newTaskObject = new ParseObject("Tasks");
+	        newTaskObject.put("SubjectNumber", newTask.getSubjectNumber());
+	        newTaskObject.put("Deadline", newTask.getClassDeadline().getTime());
+	        newTaskObject.put("TaskName", newTask.getName());
+            newTaskObject.put("Location", newTask.getSubmitLocation());
+            newTaskObject.put("Username", ParseUser.getCurrentUser().getUsername());
+	        newTaskObject.setACL(new ParseACL());
+	        newTaskObject.saveInBackground();
 		}
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, month);
-		calendar.set(Calendar.DAY_OF_MONTH, day);
-		calendar.set(Calendar.HOUR, hour);
-		calendar.set(Calendar.MINUTE, minute);
-		tasks.add(new Task(s, selectedTaskType, selectedNumber, calendar).setSubmitLocation(location));
 		return true;
 	}
+	
+	public void setTasks(List<Task> tasks, boolean addOnServer) {
+	    for (Task task : tasks) {
+	        addTask(task, addOnServer);
+	    }
+	}
+	
+	public List<String> getSubjectNumbers() {
+        return new ArrayList<String>(subjectNumbers);
+    }
 }
