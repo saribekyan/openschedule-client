@@ -291,6 +291,7 @@ public class TasksFragment extends Fragment {
 				profile.getTask(taskName).setPersonalDeadline(cal);
 			} else if (reqCode == 1) {
 				profile.getTask(taskName).changeClassDeadline(cal);
+				profile.addTask(profile.getTask(taskName), true);
 			}
 		} else {
 			

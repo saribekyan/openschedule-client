@@ -104,8 +104,8 @@ public class AddTaskFragment extends Fragment {
 				
                 String subjectNumber = profile.getSubjects().get(selectSubject.getSelectedItemPosition()).getNumber();
                 Task newTask = new Task(subjectNumber,
-                                        subjectNumber + " " + Task.TASKS[selectAssignment.getSelectedItemPosition()]
-                                                          + " " + selectAssignmentNumber.getSelectedItemPosition(),
+                                        subjectNumber + "\n" + Task.TASKS[selectAssignment.getSelectedItemPosition()]
+                                                      + " " + selectAssignmentNumber.getSelectedItemPosition(),
                                         deadlineCalendar);
                 newTask.setSubmitLocation(locationEditText.getText().toString());
                 if (!profile.addTask(newTask, true)) {
